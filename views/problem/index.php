@@ -1,23 +1,22 @@
 <?php
 
-use app\models\Student;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\StudentSearch */
+/* @var $searchModel app\models\ProblemSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Students';
+$this->title = 'Problems';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="student-index">
+<div class="problem-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Student', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Problem', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,18 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'first_name',
-            'class',
-            'year',
-            'teacher',
+            'statement',
+            'properties',
+            'numbers',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); 
+    ]); ?>
 
-    $session = Yii::$app->session;
-    //print_r($session);
-    echo $session['first_name'];
-
-    ?>
 </div>
