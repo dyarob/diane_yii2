@@ -7,15 +7,15 @@ use yii\helpers\Html;
 /* @var $model app\models\Student */
 
 $_SESSION = Yii::$app->session;
+//$this->registerJs('js/interfaceIE.js', \yii\web\View::POS_READY);
 ?>
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<SCRIPT language="JavaScript" src="static/js/interfaceIE.js"></script>
-<link rel="stylesheet" type="text/css" href="static/css/interfaceIE.css">
+<SCRIPT type="text/javascript" src="js/interfaceIE.js"></script>
+<link rel="stylesheet" type="text/css" href="css/interfaceIE.css">
 
 <div class="student-answer">
 
-<form action=\"diag_general.php\" name=\"info\" method=\"post\" onsubmit=\" return verifForm()\"> 
+<form action="diag_general.php" name="info" method="post" onsubmit="return verifForm()"> 
 <table width="67%" align="center">
 <tr><td colspan="2"><table width="100%"  border="0">
 <tr>
@@ -23,6 +23,7 @@ $_SESSION = Yii::$app->session;
 </td>
 <td width="52%" align="center">
 <?php print(ucfirst($_SESSION['first_name']));
+//$this->registerJs('js/interfaceIE.js', \yii\web\View::POS_END);
 //."   ".strtoupper($_SESSION['nom']));?></td>
 <td width="23%">&nbsp;</td>
 </tr>
