@@ -3,19 +3,17 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Student;
-use app\models\StudentSearch;
-use app\models\AnswerForm;
-use yii\web\Session;
-use yii\db\Query;
+use app\models\Teacher;
+use app\models\TeacherSearch;
+use app\models\LoginForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * StudentController implements the CRUD actions for Student model.
+ * TeacherController implements the CRUD actions for Teacher model.
  */
-class StudentController extends Controller
+class TeacherController extends Controller
 {
     public function behaviors()
     {
@@ -30,12 +28,12 @@ class StudentController extends Controller
     }
 
     /**
-     * Lists all Student models.
+     * Lists all Teacher models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new StudentSearch();
+        $searchModel = new TeacherSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +43,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Displays a single Student model.
+     * Displays a single Teacher model.
      * @param integer $id
      * @return mixed
      */
@@ -57,13 +55,13 @@ class StudentController extends Controller
     }
 
     /**
-     * Creates a new Student model.
+     * Creates a new Teacher model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Student();
+        $model = new Teacher();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -75,7 +73,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Updates an existing Student model.
+     * Updates an existing Teacher model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -94,7 +92,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Deletes an existing Student model.
+     * Deletes an existing Teacher model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -107,69 +105,79 @@ class StudentController extends Controller
     }
 
     /**
-     * Finds the Student model based on its primary key value.
+     * Finds the Teacher model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Student the loaded model
+     * @return Teacher the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Student::findOne($id)) !== null) {
+        if (($model = Teacher::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
-    public function actionEntry()
+
+    public function actionSignup()
     {
-    	$model = new Student;
-	if ($model->load(Yii::$app->request->post())
-		&& $model->validate()) {
-		//valid data recieved in $model
-		// 1- Verify if the student already exists
-		$row = (new \yii\db\Query())
-			->select('*')
-			->from('students')
-			->where(['first_name' => $model->first_name,
-				'class' => $model->class])
-			->exists();
-		if ($row === FALSE)
-		// 2- If not, save the model (create it)
-		$model->save();
-		// 3- Open session
-		$session = Yii::$app->session;
-		$session->open();
-		$session['first_name'] = $model->first_name;
-		// 4- Redirect
-            	return $this->redirect(['answer']);
-	} else {
-		return $this->render('entry', ['model' => $model]);
+	$model = new Teacher();
+
+	if ($model->load(Yii::$app->request->post())) {
+	    if ($model->validate()) {
+	        // form inputs are valid, do something here
+		if ($this->actionInsert($model) === TRUE);
+			return $this->render('index');
+	    }
+        }
+        return $this->render('signup', ['model' => $model]);
+    }
+
+    public function actionInsert($model)
+    {
+	// 1- Verify if the student already exists
+	$row = (new \yii\db\Query())
+		->select('*')
+		->from('teachers')
+		->where(['prenom' => $model->prenom,
+			'nom' => $model->nom])
+		->exists();
+	$row2 = (new \yii\db\Query())
+		->select('*')
+		->from('teachers')
+		->where(['login' => $model->login])
+		->exists();
+	if ($row === FALSE && $row2 === FALSE)
+	{
+	// 2- If not, save the model (create it)
+	$model->save();
+	
+	// 3- Open session
+	$session = Yii::$app->session;
+	$session->open();
+	$session['login'] = $model->login;
+	return TRUE;
 	}
+	else
+	return FALSE;
     }
 
-	/*
-	* List of series of problems
-	*/
-    public function actionProblems()
+    public function actionLogin()
     {
-    }
+        if (!\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
 
-	/*
-	* The student want to answer a give problem/serie of problems.
-	*/
-    public function actionAnswer()
-    {
-    	$model = new AnswerForm;
-	if ($model->load(Yii::$app->request->post())
-		&& $model->validate()) {
-		return $this->redirect('index.php?r=answer/index');//, ['model' => $model]);
-	} else {
-		return $this->render('answer', ['model' => $model]);
-	}
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->goBack();
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
     }
-
 
 }
-
