@@ -2,6 +2,8 @@
 
 use app\models\Student;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Student */
@@ -15,7 +17,8 @@ $_SESSION = Yii::$app->session;
 
 <div class="student-answer">
 
-<form action="diag_general.php" name="info" method="post" onsubmit="return verifForm()"> 
+<form action="<?= Url::toRoute(['student/submitanswer']) ?>" name="info" method="post" onsubmit="return verifForm()"> 
+
 <table width="67%" align="center">
 <tr><td colspan="2"><table width="100%"  border="0">
 <tr>
@@ -141,6 +144,8 @@ value="Ecrire dans la feuille" style="width:200"
 </table></td>
 <td width="59%" align="center" valign="top"><table width="100%"  border="0">
 <tr>
+
+
 <td height="22" colspan="3" class="aide">&Eacute;cris tes calculs et ta r&eacute;ponse dans cette feuille</td>
 </tr>
 <tr>
@@ -151,9 +156,20 @@ onClick="document.info.zonetexte.value='';document.info.zonetexte.focus();" valu
 onClick="if (feuille.isContentEditable==true) annulerAction();" value="Annuler"></td>
 </tr>
 <tr align="center">
-<td colspan="3" valign="middle"><textarea name="zonetexte" cols="45" rows="24" class="champText" id="feuille"
+<td colspan="3" valign="middle">
+
+
+</form>
+<?php $form = ActiveForm::begin([]); ?>
+<?= $form->field($model, 'answer')->textarea() ?>
+
+<!--
+<textarea name="zonetexte" cols="45" rows="24" class="champText" id="feuille"
 onFocus="colorFocus('feuille');" 
-onBlur="colorBlur('feuille');"><?php if(isset($precedent)) echo($zoneTexte);?></textarea></td>
+onBlur="colorBlur('feuille');"><?php //if(isset($precedent)) echo($zoneTexte);?></textarea>
+
+
+</td>
 </tr>
 </table></td>
 </tr>
@@ -163,6 +179,12 @@ onBlur="colorBlur('feuille');"><?php if(isset($precedent)) echo($zoneTexte);?></
 <input name="button" type="submit" class="bouton" 
 style="width:240;" value="Exercice termin&eacute;">
 </p>
+-->
+
+<?= Html::submitButton('Exercice termin&eacute;', ['class' => 'btn btn-primary', 'name' => 'answer-button']) ?>
+<?php ActiveForm::end(); ?>
+
+
 </td>
 </tr>
 <tr>
