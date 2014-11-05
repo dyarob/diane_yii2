@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Teacher;
 use app\models\TeacherSearch;
-use app\models\LoginForm;
+use app\models\TeacherLoginForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -170,7 +170,7 @@ class TeacherController extends Controller
             return $this->goHome();
         }
 
-        $model = new LoginForm();
+        $model = new TeacherLoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
