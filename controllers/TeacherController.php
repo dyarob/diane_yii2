@@ -6,9 +6,11 @@ use Yii;
 use app\models\Teacher;
 use app\models\TeacherSearch;
 use app\models\TeacherLoginForm;
+use app\models\Student;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\Pagination;
 
 /**
  * TeacherController implements the CRUD actions for Teacher model.
@@ -129,27 +131,21 @@ class TeacherController extends Controller
 	    if ($model->validate()) {
 	        // form inputs are valid, do something here
 		if ($this->actionInsert($model) === TRUE);
-			return $this->render('index');
+			return $this->redirect(['dashboard']);
 	    }
         }
         return $this->render('signup', ['model' => $model]);
     }
 
-    public function actionInsert($model)
+    protected function actionInsert($model)
     {
 	// 1- Verify if the student already exists
 	$row = (new \yii\db\Query())
 		->select('*')
 		->from('teachers')
-		->where(['prenom' => $model->prenom,
-			'nom' => $model->nom])
-		->exists();
-	$row2 = (new \yii\db\Query())
-		->select('*')
-		->from('teachers')
 		->where(['login' => $model->login])
 		->exists();
-	if ($row === FALSE && $row2 === FALSE)
+	if ($row === FALSE)
 	{
 	// 2- If not, save the model (create it)
 	$model->save();
@@ -172,7 +168,7 @@ class TeacherController extends Controller
 
         $model = new TeacherLoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+		return $this->redirect(['dashboard']);
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -180,4 +176,23 @@ class TeacherController extends Controller
         }
     }
 
+    public function actionDashboard()
+    {
+	$query = Student::find();
+	$pagination = new Pagination([
+		'defaultPageSize' => 20,
+		'totalCount' => $query->count(),
+	]);
+	$myStudents = $query->orderBy('first_name')
+		->offset($pagination->offset)
+		->limit($pagination->limit)
+		->all();
+	return $this->render('dashboard', [
+		'students' => $myStudents,
+		'pagination' => $pagination,
+	]);
+    }
+
+
 }
+
