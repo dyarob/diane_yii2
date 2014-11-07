@@ -12,7 +12,7 @@ $_SESSION = Yii::$app->session;
 //$this->registerJs('js/interfaceIE.js', \yii\web\View::POS_READY);
 ?>
 
-<SCRIPT type="text/javascript" src="js/interfaceIE.js"></script>
+<script type="text/javascript" src="js/interfaceIE.js"></script>
 <link rel="stylesheet" type="text/css" href="css/interfaceIE.css">
 
 <div class="student-answer">

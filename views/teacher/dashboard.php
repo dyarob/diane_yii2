@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 ?>
+<script type="text/javascript" src="js/showStudent.js"></script>
 <link rel="stylesheet" type="text/css" href="css/new.css">
 <h1>Mes élèves</h1>
 <hr />
@@ -13,15 +14,14 @@ use yii\widgets\LinkPager;
 	<ul>
 		<?php foreach ($students as $student): ?>
 		<li>
-		<a href="<?= Url::base() ?>?r=teacher/student&first_name=<?= Html::encode("{$student->first_name}") ?>">
-		<?= Html::encode("{$student->first_name}") ?>
-		</a>
+		<p onclick="showStudent('<?= $student->id ?>')">
+		    <?= Html::encode("{$student->first_name}") ?></p>
 		</li>
 		<?php endforeach; ?>
 	</ul>
 	<?= LinkPager::widget(['pagination' => $pagination]) ?>
 </div>
-<div class="column column-big">
-	coucou
+<div class="column column-big" id="txtHint">
+	<p>Sélectionnez un élève pour voir son resumé</p>
 </div>
 </div>

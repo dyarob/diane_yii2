@@ -190,7 +190,17 @@ class TeacherController extends Controller
 	return $this->render('dashboard', [
 		'students' => $myStudents,
 		'pagination' => $pagination,
+		'selectedStudent' => NULL,
 	]);
+    }
+
+    /*
+    ** Displays a resume of the student's stats & problems solved.
+    ** params : first_name -> first name of selectedStudent
+    */
+    public function actionStudent($params)
+    {
+    	
     }
 
 
