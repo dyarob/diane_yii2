@@ -50,4 +50,9 @@ class Student extends \yii\db\ActiveRecord
             'teacher' => 'Teacher',
         ];
     }
+
+	public function getAnswers()
+	{
+		return $this->hasMany(Answer::className(), ['id_student' => 'id'])->asArray();
+	}
 }

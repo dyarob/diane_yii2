@@ -194,14 +194,6 @@ class TeacherController extends Controller
 	]);
     }
 
-    /*
-    ** Displays a resume of the student's stats & problems solved.
-    ** params : first_name -> first name of selectedStudent
-    */
-    public function actionStudent($params)
-    {
-    	
-    }
 
 
 }
