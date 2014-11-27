@@ -14,7 +14,7 @@ use yii\widgets\LinkPager;
 	<ul>
 		<?php foreach ($students as $student): ?>
 		<li>
-		<p onclick="showStudent('<?= $student->id ?>')">
+		<p onclick="showStudent(<?= Html::encode(json_encode(array('first_name'=>$student->first_name, 'class'=>$student->class))) ?>)">
 		    <?= Html::encode("{$student->first_name}") ?></p>
 		</li>
 		<?php endforeach; ?>
