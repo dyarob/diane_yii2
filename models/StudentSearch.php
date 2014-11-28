@@ -18,8 +18,8 @@ class StudentSearch extends Student
     public function rules()
     {
         return [
-            [['id', 'teacher'], 'integer'],
-            [['first_name', 'class', 'year'], 'safe'],
+            [['id', 'id_class'], 'integer'],
+            [['first_name'], 'safe'],
         ];
     }
 
@@ -53,12 +53,10 @@ class StudentSearch extends Student
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'teacher' => $this->teacher,
+            'id_class' => $this->id_class,
         ]);
 
-        $query->andFilterWhere(['like', 'first_name', $this->first_name])
-            ->andFilterWhere(['like', 'class', $this->class])
-            ->andFilterWhere(['like', 'year', $this->year]);
+        $query->andFilterWhere(['like', 'first_name', $this->first_name]);
 
         return $dataProvider;
     }

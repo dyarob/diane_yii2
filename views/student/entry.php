@@ -12,9 +12,8 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
         <?= $form->field($model, 'first_name') ?>
-        <?= $form->field($model, 'class') ?>
-        <?= $form->field($model, 'year') ?>
-        <?= $form->field($model, 'teacher') ?>
+		<?= $form->field($model, 'id_class')
+				->dropDownList(['1' => 'CE2', '2' => 'CM1', '3' => 'CM1-2']) ?>
     
         <div class="form-group">
             <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>

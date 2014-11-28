@@ -9,9 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $first_name
- * @property string $class
- * @property string $year
- * @property integer $teacher
+ * @property integer $id_class
  */
 class Student extends \yii\db\ActiveRecord
 {
@@ -29,11 +27,9 @@ class Student extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['first_name', 'class', 'year', 'teacher'], 'required'],
-            [['teacher'], 'integer'],
+            [['first_name', 'id_class'], 'required'],
+            [['id_class'], 'integer'],
             [['first_name'], 'string', 'max' => 20],
-            [['class'], 'string', 'max' => 8],
-            [['year'], 'string', 'max' => 4]
         ];
     }
 
@@ -45,9 +41,7 @@ class Student extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'first_name' => 'First Name',
-            'class' => 'Class',
-            'year' => 'Year',
-            'teacher' => 'Teacher',
+            'id_class' => 'Id Class',
         ];
     }
 

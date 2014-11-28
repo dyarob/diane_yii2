@@ -14,11 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'first_name')->textInput(['maxlength' => 20]) ?>
 
-    <?= $form->field($model, 'class')->textInput(['maxlength' => 8]) ?>
-
-    <?= $form->field($model, 'year')->textInput(['maxlength' => 4]) ?>
-
-    <?= $form->field($model, 'teacher')->textInput() ?>
+    <?= $form->field($model, 'id_class')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -133,7 +133,7 @@ class StudentController extends Controller
 			->select('*')
 			->from('students')
 			->where(['first_name' => $model->first_name,
-				'class' => $model->class])
+				'id_class' => $model->id_class])
 			->exists();
 		if ($row === FALSE)
 		// 2- If not, save the model (create it)

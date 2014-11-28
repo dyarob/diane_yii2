@@ -1,6 +1,5 @@
 <?php
 
-use app\models\Student;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -28,17 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'first_name',
-            'class',
-            'year',
-            'teacher',
+            'id_class',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]); 
+    ]); ?>
 
-    $session = Yii::$app->session;
-    //print_r($session);
-    echo $session['first_name'];
-
-    ?>
 </div>
