@@ -184,6 +184,7 @@ class TeacherController extends Controller
 		'totalCount' => $query->count(),
 	]);
 	$myStudents = $query->orderBy('first_name')
+		->where(['teacher' => Yii::$app->user->identity->id])
 		->offset($pagination->offset)
 		->limit($pagination->limit)
 		->all();
