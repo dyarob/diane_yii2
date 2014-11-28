@@ -2,7 +2,18 @@
 
 namespace app\models;
 
-class UserTeacher extends \yii\base\Object implements \yii\web\IdentityInterface
+use Yii;
+/**
+ * This is the model class for table "teachers".
+ *
+ * @property integer $id
+ * @property string $nom
+ * @property string $prenom
+ * @property string $login
+ * @property string $password
+ */
+
+class UserTeacher extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     public $id;
     public $username;
@@ -27,13 +38,58 @@ class UserTeacher extends \yii\base\Object implements \yii\web\IdentityInterface
         ],
     ];
 
+    public $repeatpassword;
+
     /**
      * @inheritdoc
      */
-    public static function findIdentity($id)
+    public static function tableName()
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return 'teachers';
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['nom', 'prenom', 'login', 'password', 'repeatpassword'], 'required'],
+	    [['login', 'password', 'repeatpassword'], 'string', 'min' => 6],
+	    [['nom', 'prenom'], 'string', 'min' => 3],
+            [['nom'], 'string', 'max' => 20],
+            [['prenom', 'password'], 'string', 'max' => 16],
+            [['login'], 'string', 'max' => 10],
+	    [['repeatpassword'], 'compare', 'compareAttribute'=>'password', 'message'=>"Les mots de passe ne correspondent pas."]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'nom' => 'Nom',
+            'prenom' => 'Prenom',
+            'login' => 'Login',
+            'password' => 'Password',
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+	public static function findIdentity($id)
+	{
+		$dbTeacher = self::find()->where(["id" => $id])
+			->one();
+		if (!count($dbTeacher)) {
+			return null;
+		}
+		return new static($dbTeacher);
+	}
 
     /**
      * @inheritdoc
