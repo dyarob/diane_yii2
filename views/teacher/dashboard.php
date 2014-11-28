@@ -12,31 +12,22 @@ use yii\widgets\LinkPager;
 <div class="contents">
 <div class="column column-small">
 	<ul>
+
 		<?php
 		// ====================================
 		foreach ($students as $student):
-		//print_r($student->answers);
-		//print_r($student);
 		// ====================================
-		/*$arr_answers = [];
-		foreach ($student->answers as $answer):
-			$arr_answer[$answer->id] = 
-		 */
 		?>
 
 		<li>
 		<p onclick="showStudent(<?= Html::encode(json_encode(
-				//array(
-				//	'first_name' => $student->first_name,
-				//	'class' => $student->class,
-				//	'answers' => $arr_answers,
-				//)
 			array('s' => $student->attributes,
 				  'a' => $student->answers)
 				)) ?>)">
 		    <?= Html::encode("{$student->first_name}") ?></p>
 		</li>
 		<?php endforeach; ?>
+
 	</ul>
 	<?= LinkPager::widget(['pagination' => $pagination]) ?>
 </div>

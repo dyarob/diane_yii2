@@ -14,6 +14,7 @@ use Yii;
  * @property integer $op_type
  * @property integer $resol_type
  * @property integer $miscalc
+ * @property integer $correct
  */
 class Answer extends \yii\db\ActiveRecord
 {
@@ -31,8 +32,9 @@ class Answer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_student', 'id_problem', 'answer', 'op_type', 'resol_type', 'miscalc'], 'required'],
+            [['id_student', 'id_problem', 'answer', 'op_type', 'resol_type', 'miscalc', 'correct'], 'required'],
             [['id_student', 'id_problem', 'op_type', 'resol_type', 'miscalc'], 'integer'],
+			[['correct'], 'boolean'],
             [['answer'], 'string', 'max' => 240]
         ];
     }
@@ -50,6 +52,7 @@ class Answer extends \yii\db\ActiveRecord
             'op_type' => 'Op Type',
             'resol_type' => 'Resol Type',
             'miscalc' => 'Miscalc',
+			'correct' => 'Correct',
         ];
     }
 
