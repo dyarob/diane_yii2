@@ -14,6 +14,7 @@ use yii\widgets\LinkPager;
 	<ul>
 
 		<?php
+			print_r($teacher->clas);
 		// ====================================
 		foreach ($students as $student):
 		// ====================================
@@ -24,7 +25,9 @@ use yii\widgets\LinkPager;
 			array('s' => $student->attributes,
 				  'a' => $student->answers)
 				)) ?>)">
-		    <?= Html::encode("{$student->first_name}") ?></p>
+			<?= Html::encode("{$student->first_name}") ?>
+			<?= Html::encode("{$student->clas->name}") ?>
+		</p>
 		</li>
 		<?php endforeach; ?>
 

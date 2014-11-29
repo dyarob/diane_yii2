@@ -57,6 +57,16 @@ class Teacher extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         ];
     }
 
+	public function getClas()
+	{
+		return $this->hasMany(Clas::className(), ['id_teacher' => 'id'])
+			->where('year=:year', [':year' => date("Y")])
+			->indexBy('id')
+			->select('id')
+			->column();
+			//->asArray();
+	}
+
     /**
      * @inheritdoc
      */

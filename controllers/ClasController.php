@@ -3,19 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Teacher;
-use app\models\TeacherSearch;
-use app\models\TeacherLoginForm;
-use app\models\Student;
+use app\models\Clas;
+use app\models\ClasSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\data\Pagination;
 
 /**
- * TeacherController implements the CRUD actions for Teacher model.
+ * ClasController implements the CRUD actions for Clas model.
  */
-class TeacherController extends Controller
+class ClasController extends Controller
 {
     public function behaviors()
     {
@@ -30,12 +27,12 @@ class TeacherController extends Controller
     }
 
     /**
-     * Lists all Teacher models.
+     * Lists all Clas models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new TeacherSearch();
+        $searchModel = new ClasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +42,7 @@ class TeacherController extends Controller
     }
 
     /**
-     * Displays a single Teacher model.
+     * Displays a single Clas model.
      * @param integer $id
      * @return mixed
      */
@@ -57,13 +54,13 @@ class TeacherController extends Controller
     }
 
     /**
-     * Creates a new Teacher model.
+     * Creates a new Clas model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Teacher();
+        $model = new Clas();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -75,7 +72,7 @@ class TeacherController extends Controller
     }
 
     /**
-     * Updates an existing Teacher model.
+     * Updates an existing Clas model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -94,7 +91,7 @@ class TeacherController extends Controller
     }
 
     /**
-     * Deletes an existing Teacher model.
+     * Deletes an existing Clas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -107,98 +104,18 @@ class TeacherController extends Controller
     }
 
     /**
-     * Finds the Teacher model based on its primary key value.
+     * Finds the Clas model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Teacher the loaded model
+     * @return Clas the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Teacher::findOne($id)) !== null) {
+        if (($model = Clas::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
-
-    public function actionSignup()
-    {
-	$model = new Teacher();
-
-	if ($model->load(Yii::$app->request->post())) {
-	    if ($model->validate()) {
-	        // form inputs are valid, do something here
-		if ($this->actionInsert($model) === TRUE);
-			return $this->redirect(['dashboard']);
-	    }
-        }
-        return $this->render('signup', ['model' => $model]);
-    }
-
-    protected function actionInsert($model)
-    {
-	// 1- Verify if the student already exists
-	$row = (new \yii\db\Query())
-		->select('*')
-		->from('teachers')
-		->where(['login' => $model->login])
-		->exists();
-	if ($row === FALSE)
-	{
-	// 2- If not, save the model (create it)
-	$model->save();
-	
-	// 3- Open session
-	$session = Yii::$app->session;
-	$session->open();
-	$session['login'] = $model->login;
-	return TRUE;
-	}
-	else
-	return FALSE;
-    }
-
-    public function actionLogin()
-    {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new TeacherLoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-		return $this->redirect(['dashboard']);
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionDashboard()
-    {
-		$model = Yii::$app->user->identity;
-		$query = Student::find();
-		$pagination = new Pagination([
-			'defaultPageSize' => 20,
-			'totalCount' => $query->count(),
-		]);
-		$myStudents = $query
-			->where(['id_class' => Yii::$app->user->identity->clas])
-			->offset($pagination->offset)
-			->limit($pagination->limit)
-			->orderBy('first_name')
-			->all();
-		return $this->render('dashboard', [
-			'teacher' => $model,
-			'students' => $myStudents,
-			'pagination' => $pagination,
-			'selectedStudent' => NULL,
-		]);
-    }
-
-
-
 }
-
