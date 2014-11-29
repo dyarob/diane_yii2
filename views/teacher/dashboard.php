@@ -14,7 +14,6 @@ use yii\widgets\LinkPager;
 	<ul>
 
 		<?php
-			print_r($teacher->clas);
 		// ====================================
 		foreach ($students as $student):
 		// ====================================

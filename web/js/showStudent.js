@@ -10,7 +10,7 @@ function showStudent(studt) {
 	var content = document.createElement("div");
 
 	// New page elements filling
-	title.innerHTML = studt.s.first_name + ", " + studt.s.class;
+	title.innerHTML = studt.s.first_name;
 	var i;
 	var l = studt.a.length;
 	var answers = new Array(l);

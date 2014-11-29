@@ -165,7 +165,8 @@ class StudentController extends Controller
 		if ($model->load(Yii::$app->request->post())
 			&& $model->validate()) {
 			$model->save();
-			return $this->redirect('index.php?r=answer/index');//, ['model' => $model]);
+			Yii::$app->session->close();
+			return $this->redirect('index.php?r=student/entry');//, ['model' => $model]);
 		} else {
 			return $this->render('answer', ['model' => $model]);
 		}
