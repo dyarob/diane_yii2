@@ -1,55 +1,25 @@
 <?php
-
 use app\models\Student;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
-
 /* @var $this yii\web\View */
 /* @var $model app\models\Student */
-
 $_SESSION = Yii::$app->session;
-//$this->registerJs('js/interfaceIE.js', \yii\web\View::POS_READY);
 ?>
-
 <script type="text/javascript" src="js/interfaceIE.js"></script>
-<link rel="stylesheet" type="text/css" href="css/interfaceIE.css">
+<link rel="stylesheet" type="text/css" href="css/new.css">
 
-<div class="student-answer">
-
-<form action="<?= Url::toRoute(['student/submitanswer']) ?>" name="info" method="post" onsubmit="return verifForm()"> 
-
-<table width="67%" align="center">
-<tr><td colspan="2"><table width="100%"  border="0">
-<tr>
-<td width="25%">
-</td>
-<td width="52%" align="center">
-<?php print(ucfirst($_SESSION['first_name']));
-//$this->registerJs('js/interfaceIE.js', \yii\web\View::POS_END);
-//."   ".strtoupper($_SESSION['nom']));?></td>
-<td width="23%">&nbsp;</td>
-</tr>
-</table></td></tr>
-<tr>
-<td width="41%" rowspan="3" valign="top"> 
-<table width="440" border="0" cellspacing="2">
-<tr>
-<td width="434" colspan="2" align="center">
-<table width="97%" border="0" cellpadding="0" cellspacing="0">
-<tr>
-<td height="24" valign="top" class="aide">
-&nbsp;&nbsp; Exercice No
+<div class="contents">
+<?php $form = ActiveForm::begin(['action' => Url::toRoute(['student/submitanswer']), 'options' => ['name' => 'info']]); ?>
+<div class="column column-half">
+<?php print(ucfirst($_SESSION['first_name']));?>
+<p>Exercice No
 <!--<?php //echo ($_SESSION["totalExo"]-$nbExo+1); ?>-->
-</td>
-</tr>
-<tr>
-<td>
-<table width="100%" border="2" align="center" cellpadding="2" cellspacing="0">
-<tr>
-<td>
+</p>
 
-<?php // TRUCS EN PHP ICI
+<p>
+<?php
 $text = "Maurice a 15 vaches. Il se marie avec Jacquotte, qui vit dans la ferme voisine. Ils decident de faire paitre leurs vaches dans le meme pre. Maintenant, il y a 24 vaches qui paissent dans le pre. Combien de vaches Jacquotte a apportee en dot ?";//$problem['statement'];
 $idpbm = 1;//$problem['id'];
 $id = 0;
@@ -66,45 +36,34 @@ for($piece = strtok($text, " "), $i=1 ; $piece != "" ; $piece = strtok(" "))
 }
 print("<Br>");
 ?>
+</p>
 
-</td>
-</tr>
-</table>				</td>
-</tr>
-<tr>
-<td height="27" valign="middle" class="aide">Pour &eacute;crire, tu peux cliquer sur les mots de l'&eacute;nonc&eacute;</td>
-</tr>
-</table>	      </td>
-</tr>
-<tr>
-<td width="434"   align="center">             
-<table width="100%"  border="0">
-<tr>
-<td align="center"><input name="T1" type="text" size="65" style="font-size:10pt;"  <?php if (isset($precedent)) echo('value="'.$sas.'"'); else echo('value=""');?> class="champText" id="sas"
+<hr />
+<p>
+<strong>Pour &eacute;crire, tu peux cliquer sur les mots de l'&eacute;nonc&eacute;</strong>
+</p>
+<p>
+<input name="T1" type="text" class="wide" <?php if (isset($precedent)) echo('value="'.$sas.'"'); else echo('value=""');?> class="champText" id="sas"
 onFocus="monTour(5);colorFocus('sas');" 
-onBlur="colorBlur('sas');"></td>
-</tr>
-</table>          </td>
-</tr>   
-<tr>
-<td height="45" colspan="2" align="center">
-<table width="100%"  border="0">
-<tr>
-<td width="28%" align="left"><input name="efface5" type="button" class="bouton"  onClick="document.info.T1.value='';document.info.T1.focus();" value="Effacer tout" style="width:110"></td>
-<td width="24%" align="center"><input type="button" class="bouton" name="annuler2" value="Annuler" onClick="annulerSas();" style="width:70">                </td>
-<td width="48%" align="right"><input name="button2" type="button" class="bouton"  onClick="inserer(document.info.T1.value);" 
-value="Ecrire dans la feuille" style="width:200"
-></td>
-</tr>
-</table></td> 
-</tr>
-<tr>
-<td colspan="2" align="center"> 
+onBlur="colorBlur('sas');">
+</p>
+<p>
+<input name="efface5" type="button" class="bouton"  onClick="document.info.T1.value='';document.info.T1.focus();" value="Effacer tout">
+<input type="button" class="bouton" name="annuler2" value="Annuler" onClick="annulerSas();">
+<input name="button2" type="button" class="bouton"  onClick="inserer(document.info.T1.value);" value="Ecrire dans la feuille">
+</p>
+<hr />
 
-<table width="151" height="153" align="center<?php //echo (($audio ? 'left' : 'center')); ?>">
+
+<?php
+// ==============================================
+// CALCULATOR
+// ==============================================
+?>
+<table <?php //echo (($audio ? 'left' : 'center')); ?>>
 <tr valign="middle">
 <td colspan="4" align="center">
-<span class="aide">Tu peux &eacute;crire tes calculs ici </span>
+<p><strong>Tu peux &eacute;crire tes calculs ici :<strong></p>
 </td>
 </tr>
 <tr valign="middle">
@@ -136,74 +95,36 @@ value="Ecrire dans la feuille" style="width:200"
 <td align="center" valign="middle"><input name="mult" type="button" class="Boutcal" id="mult" onClick="if (tester == 5) {insererSas(' x ');} else if (tester == 1){afficher(' x ');};" value=" x "></td>
 </tr>
 </table>
-
+<?php
+// ==============================================
+// CALCULATOR - END
+// ==============================================
+?>
 <?php //PHP AUDIO ICI ?>
+</div>
 
-</td>
-</tr>
-</table></td>
-<td width="59%" align="center" valign="top"><table width="100%"  border="0">
-<tr>
-
-
-<td height="22" colspan="3" class="aide">&Eacute;cris tes calculs et ta r&eacute;ponse dans cette feuille</td>
-</tr>
-<tr>
-<td align="center"><input name="effacer" type="button" class="bouton" id="effacer2"
-onClick="document.info.zonetexte.value='';document.info.zonetexte.focus();" value="Effacer toute la feuille" style="width:150">            </td>
-<td align="center"><input name="retour" type="button" class="bouton" onClick="inserer('\n');document.info.zonetexte.focus();" value="Passer &agrave; la ligne" style="width:115"></td>
-<td align="center"><input name="annuler" type="button" class="bouton" id="annuler" 
-onClick="if (feuille.isContentEditable==true) annulerAction();" value="Annuler"></td>
-</tr>
-<tr align="center">
-<td colspan="3" valign="middle">
-
-
-</form>
-<?php $form = ActiveForm::begin([]); ?>
-<?= $form->field($model, 'answer')->textarea() ?>
-
-<!--
-<textarea name="zonetexte" cols="45" rows="24" class="champText" id="feuille"
-onFocus="colorFocus('feuille');" 
-onBlur="colorBlur('feuille');"><?php //if(isset($precedent)) echo($zoneTexte);?></textarea>
-
-
-</td>
-</tr>
-</table></td>
-</tr>
-<tr>
-<td align="center">
+<div class="column column-half">
+<hr />
+<p><strong>&Eacute;cris tes calculs et ta r&eacute;ponse dans cette feuille :</strong></p>
 <p>
-<input name="button" type="submit" class="bouton" 
-style="width:240;" value="Exercice termin&eacute;">
+<input name="effacer" type="button" class="bouton" id="effacer2"
+onClick="document.info.zonetexte.value='';document.info.zonetexte.focus();" value="Effacer toute la feuille">            
+<input name="retour" type="button" class="bouton" onClick="inserer('\n');document.info.zonetexte.focus();" value="Passer &agrave; la ligne">
+<input name="annuler" type="button" class="bouton" id="annuler" 
+onClick="if (feuille.isContentEditable==true) annulerAction();" value="Annuler">
 </p>
--->
-
+<?= $form->field($model, 'answer', ['labelOptions' => ['label' => '']])->textarea(['name' => 'zonetexte', 'class' => 'wide', 'rows' => 10, 'id' => 'feuille', 'onFocus' => 'colorFocus("feuille");', 'onBlur' => 'colorBlur("feuille");']) ?>
 <?= Html::submitButton('Exercice termin&eacute;', ['class' => 'btn btn-primary', 'name' => 'answer-button']) ?>
-<?php ActiveForm::end(); ?>
-
-
-</td>
-</tr>
-<tr>
-<td align="center" class="aide">
+<hr />
 
 <?php //PHP pour le nombre d'exos restants ici. ?>
-
-<tr align="center">
-    <td height="21" colspan="2" valign="top"><a href="javascript:;" onClick="abandonner();">Quitter </a></td>
-    </table>
     <input  name="Trace" type="hidden" id="formulaire">
     <input name="oper1" type="hidden">
     <input name="oper2" type="hidden">
     <input name="nbExo"  value="<?php //echo($nbExo);?>" type="hidden">
     <input name="numExo"  value="<?php //echo($numExo);?>" type="hidden">
-
 <?php //CODE JAVASCRIPT ICI ?>
 
-</form>
-
 </div><!-- student-answer -->
+<?php ActiveForm::end(); ?>
 

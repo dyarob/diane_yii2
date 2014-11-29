@@ -6,8 +6,14 @@
 .column-small {
 	width: 20%;
 }
+.column-half {
+	width: 50%;
+}
 .column-big {
 	width: 80%;
+}
+.wide {
+	width: 100%;
 }
 .green {
 	color: green;
