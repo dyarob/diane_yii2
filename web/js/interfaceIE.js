@@ -490,7 +490,7 @@ function inserer(selec)
 	if (isMozilla) 
 	{
 		// Si on est sur Mozilla
-		oField = document.forms['info'].elements['zonetexte'];
+		oField = document.forms['info'].elements['Answer[answer]'];
 		objectValue = oField.value;
 		deb = oField.selectionStart;
 		fin = oField.selectionEnd;
@@ -506,7 +506,7 @@ function inserer(selec)
 	else
 	{
 		// Si on est sur IE
-		oField = document.forms['info'].elements['zonetexte'];
+		oField = document.forms['info'].elements['Answer[answer]'];
 		var str = document.selection.createRange().text;
 		if (str.length>0)
 		{

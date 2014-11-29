@@ -11,7 +11,7 @@ $_SESSION = Yii::$app->session;
 <link rel="stylesheet" type="text/css" href="css/new.css">
 
 <div class="contents">
-<?php $form = ActiveForm::begin(['action' => Url::toRoute(['student/submitanswer']), 'options' => ['name' => 'info']]); ?>
+<?php $form = ActiveForm::begin(['options' => ['name' => 'info']]); ?>
 <div class="column column-half">
 <?php print(ucfirst($_SESSION['first_name']));?>
 <p>Exercice No
@@ -43,9 +43,7 @@ print("<Br>");
 <strong>Pour &eacute;crire, tu peux cliquer sur les mots de l'&eacute;nonc&eacute;</strong>
 </p>
 <p>
-<input name="T1" type="text" class="wide" <?php if (isset($precedent)) echo('value="'.$sas.'"'); else echo('value=""');?> class="champText" id="sas"
-onFocus="monTour(5);colorFocus('sas');" 
-onBlur="colorBlur('sas');">
+<input name="T1" type="text" class="wide" <?php if (isset($precedent)) echo('value="'.$sas.'"'); else echo('value=""');?> class="champText" id="sas" onFocus="monTour(5);colorFocus('sas');" onBlur="colorBlur('sas');">
 </p>
 <p>
 <input name="efface5" type="button" class="bouton"  onClick="document.info.T1.value='';document.info.T1.focus();" value="Effacer tout">
@@ -108,12 +106,11 @@ onBlur="colorBlur('sas');">
 <p><strong>&Eacute;cris tes calculs et ta r&eacute;ponse dans cette feuille :</strong></p>
 <p>
 <input name="effacer" type="button" class="bouton" id="effacer2"
-onClick="document.info.zonetexte.value='';document.info.zonetexte.focus();" value="Effacer toute la feuille">            
+onClick="document.info.zonetexte.value='';document.info.zonetexte.focus();" value="Effacer toute la feuille">        
 <input name="retour" type="button" class="bouton" onClick="inserer('\n');document.info.zonetexte.focus();" value="Passer &agrave; la ligne">
-<input name="annuler" type="button" class="bouton" id="annuler" 
-onClick="if (feuille.isContentEditable==true) annulerAction();" value="Annuler">
+<input name="annuler" type="button" class="bouton" id="annuler" onClick="if (feuille.isContentEditable==true) annulerAction();" value="Annuler">
 </p>
-<?= $form->field($model, 'answer', ['labelOptions' => ['label' => '']])->textarea(['name' => 'zonetexte', 'class' => 'wide', 'rows' => 10, 'id' => 'feuille', 'onFocus' => 'colorFocus("feuille");', 'onBlur' => 'colorBlur("feuille");']) ?>
+<?= $form->field($model, 'answer'/*, ['labelOptions' => ['label' => '']]*/)->textarea(['class' => 'wide', 'rows' => 10, 'id' => 'feuille', 'onFocus' => 'colorFocus("feuille");', 'onBlur' => 'colorBlur("feuille");']) ?>
 <?= Html::submitButton('Exercice termin&eacute;', ['class' => 'btn btn-primary', 'name' => 'answer-button']) ?>
 <hr />
 

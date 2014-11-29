@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Student;
 use app\models\StudentSearch;
-use app\models\AnswerForm;
+use app\models\Answer;
 use yii\web\Session;
 use yii\db\Query;
 use yii\web\Controller;
@@ -125,28 +125,28 @@ class StudentController extends Controller
     public function actionEntry()
     {
     	$model = new Student;
-	if ($model->load(Yii::$app->request->post())
-		&& $model->validate()) {
-		//valid data recieved in $model
-		// 1- Verify if the student already exists
-		$row = (new \yii\db\Query())
-			->select('*')
-			->from('students')
-			->where(['first_name' => $model->first_name,
-				'id_class' => $model->id_class])
-			->exists();
-		if ($row === FALSE)
-		// 2- If not, save the model (create it)
-		$model->save();
-		// 3- Open session
-		$session = Yii::$app->session;
-		$session->open();
-		$session['first_name'] = $model->first_name;
-		// 4- Redirect
-            	return $this->redirect(['answer']);
-	} else {
-		return $this->render('entry', ['model' => $model]);
-	}
+		if ($model->load(Yii::$app->request->post())
+			&& $model->validate()) {
+			//valid data recieved in $model
+			// 1- Verify if the student already exists
+			$row = (new \yii\db\Query())
+				->select('*')
+				->from('students')
+				->where(['first_name' => $model->first_name,
+					'id_class' => $model->id_class])
+				->exists();
+			if ($row === FALSE)
+			// 2- If not, save the model (create it)
+			$model->save();
+			// 3- Open session
+			$session = Yii::$app->session;
+			$session->open();
+			$session['first_name'] = $model->first_name;
+			// 4- Redirect
+					return $this->redirect(['answer']);
+		} else {
+			return $this->render('entry', ['model' => $model]);
+		}
     }
 
 	/*
@@ -161,15 +161,15 @@ class StudentController extends Controller
 	*/
     public function actionAnswer()
     {
-    	$model = new AnswerForm;
-	if ($model->load(Yii::$app->request->post())
-		&& $model->validate()) {
-		return $this->redirect('index.php?r=answer/index');//, ['model' => $model]);
-	} else {
-		return $this->render('answer', ['model' => $model]);
-	}
+    	$model = new Answer;
+		if ($model->load(Yii::$app->request->post())
+			&& $model->validate()) {
+			$model->save();
+			return $this->redirect('index.php?r=answer/index');//, ['model' => $model]);
+		} else {
+			return $this->render('answer', ['model' => $model]);
+		}
     }
-
 
 }
 
