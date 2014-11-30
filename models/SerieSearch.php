@@ -18,7 +18,7 @@ class SerieSearch extends Serie
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'nbr_of_problems'], 'integer'],
             [['name'], 'safe'],
         ];
     }
@@ -53,6 +53,7 @@ class SerieSearch extends Serie
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'nbr_of_problems' => $this->nbr_of_problems,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

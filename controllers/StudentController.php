@@ -6,6 +6,7 @@ use Yii;
 use app\models\Student;
 use app\models\StudentSearch;
 use app\models\Answer;
+use app\models\Serie;
 use yii\web\Session;
 use yii\db\Query;
 use yii\web\Controller;
@@ -153,24 +154,45 @@ class StudentController extends Controller
 	public function actionChooseserie()
 	{
 		if (isset($_POST['serie1']))
-			return $this->redirect(['answer']);
+			return $this->redirect(['answer', 'id_serie' => 1]);
 		return $this->render('chooseserie');
 	}
 
 	/*
 	* The student want to answer a give problem/serie of problems.
 	*/
-    public function actionAnswer()
+    public function actionAnswer($id_serie)
     {
-    	$model = new Answer;
-		if ($model->load(Yii::$app->request->post())
-			&& $model->validate()) {
-			$model->save();
-			Yii::$app->session->close();
-			return $this->redirect('index.php?r=student/entry');//, ['model' => $model]);
-		} else {
-			return $this->render('answer', ['model' => $model]);
+		if ($id_serie != 0)
+		{
+			$serie = Serie::find()
+				->where(['id' => $id_serie])
+				->one();
+			$problems = (new \yii\db\Query())
+				->select('*')
+				->from('problems')
+				->where(['id_serie' => $id_serie])
+				->all();
+			$prob_counter = $serie->nbr_of_problems;
+			$id_serie = 0;
 		}
+		--$prob_counter;
+		$model = new Answer;
+		if ($model->load(Yii::$app->request->post()) && $model->validate())
+		{
+			$model->save();
+			if ($prob_counter <= 0)
+			{
+				Yii::$app->session->close();
+				return $this->redirect('index.php?r=student/entry');
+			}
+		}
+		return $this->render('answer',
+				['model' => $model,
+				'problems' => $problems,
+				'serie' => $serie,
+				'prob_counter' => $prob_counter,
+				'id_serie' => $id_serie]);
     }
 
 }

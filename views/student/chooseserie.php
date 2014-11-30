@@ -9,7 +9,7 @@ $_SESSION = Yii::$app->session;
 ?>
 
 <div class="student-chooseserie">
-<h1>Choisis ta serie de problemes :</h1>
+<h1>Choisis ta série de problèmes :</h1>
 <hr />
 <?php $form = ActiveForm::begin(); ?>
 <ul>

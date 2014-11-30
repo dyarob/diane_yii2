@@ -26,7 +26,7 @@ AppAsset::register($this);
     <div class="wrap">
         <?php
             NavBar::begin([
-                'brandLabel' => 'DIANE',
+                'brandLabel' => 'DIANE - Accueil',
                 'brandUrl' => Yii::$app->homeUrl . '?r=student/entry',//Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar-inverse navbar-fixed-top',
@@ -36,14 +36,12 @@ AppAsset::register($this);
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                     ['label' => 'Le Prestigieux Blog de Bruno', 'url' => ['fr.wikipedia.org']],
-                    ['label' => 'Students', 'url' => ['/student/index']],
-                    ['label' => 'Teachers', 'url' => ['/teacher/index']],
-                    ['label' => 'Problems', 'url' => ['/problem/index']],
-                    //['label' => 'Home', 'url' => ['/site/index']],
-                    //['label' => 'About', 'url' => ['/site/about']],
-                    //['label' => 'Contact', 'url' => ['/site/contact']],
                     Yii::$app->user->isGuest ?
-                        ['label' => 'Teacher Login', 'url' => ['/teacher/login']] :
+                        '':['label' => 'Tableau de bord', 'url' => ['/teacher/dashboard']],
+                    Yii::$app->user->isGuest ?
+                        '':['label' => 'Choisir les series de problemes', 'url' => ['/teacher/chooseserie']],
+                    Yii::$app->user->isGuest ?
+                        ['label' => 'Entree des Professeurs', 'url' => ['/teacher/login']]:
                         ['label' => 'Logout (' . Yii::$app->user->identity->login . ')',
                             'url' => ['/site/logout'],
                             'linkOptions' => ['data-method' => 'post']],

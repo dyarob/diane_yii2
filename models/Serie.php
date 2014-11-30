@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property integer $nbr_of_problems
  */
 class Serie extends \yii\db\ActiveRecord
 {
@@ -26,6 +27,7 @@ class Serie extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['nbr_of_problems'], 'integer'],
             [['name'], 'string', 'max' => 40]
         ];
     }
@@ -38,6 +40,7 @@ class Serie extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'nbr_of_problems' => 'Nbr Of Problems',
         ];
     }
 }
