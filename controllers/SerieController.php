@@ -3,19 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Student;
-use app\models\StudentSearch;
-use app\models\Answer;
-use yii\web\Session;
-use yii\db\Query;
+use app\models\Serie;
+use app\models\SerieSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * StudentController implements the CRUD actions for Student model.
+ * SerieController implements the CRUD actions for Serie model.
  */
-class StudentController extends Controller
+class SerieController extends Controller
 {
     public function behaviors()
     {
@@ -30,12 +27,12 @@ class StudentController extends Controller
     }
 
     /**
-     * Lists all Student models.
+     * Lists all Serie models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new StudentSearch();
+        $searchModel = new SerieSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +42,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Displays a single Student model.
+     * Displays a single Serie model.
      * @param integer $id
      * @return mixed
      */
@@ -57,13 +54,13 @@ class StudentController extends Controller
     }
 
     /**
-     * Creates a new Student model.
+     * Creates a new Serie model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Student();
+        $model = new Serie();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -75,7 +72,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Updates an existing Student model.
+     * Updates an existing Serie model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -94,7 +91,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Deletes an existing Student model.
+     * Deletes an existing Serie model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -107,71 +104,18 @@ class StudentController extends Controller
     }
 
     /**
-     * Finds the Student model based on its primary key value.
+     * Finds the Serie model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Student the loaded model
+     * @return Serie the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Student::findOne($id)) !== null) {
+        if (($model = Serie::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
-    public function actionEntry()
-    {
-    	$model = new Student;
-		if ($model->load(Yii::$app->request->post())
-			&& $model->validate()) {
-			//valid data recieved in $model
-			// 1- Verify if the student already exists
-			$row = (new \yii\db\Query())
-				->select('*')
-				->from('students')
-				->where(['first_name' => $model->first_name,
-					'id_class' => $model->id_class])
-				->exists();
-			if ($row === FALSE)
-			// 2- If not, save the model (create it)
-			$model->save();
-			// 3- Open session
-			$session = Yii::$app->session;
-			$session->open();
-			$session['first_name'] = $model->first_name;
-			$session['student'] = $model;
-			// 4- Redirect
-					return $this->redirect(['chooseserie']);
-		} else {
-			return $this->render('entry', ['model' => $model]);
-		}
-    }
-
-	public function actionChooseserie()
-	{
-		if (isset($_POST['serie1']))
-			return $this->redirect(['answer']);
-		return $this->render('chooseserie');
-	}
-
-	/*
-	* The student want to answer a give problem/serie of problems.
-	*/
-    public function actionAnswer()
-    {
-    	$model = new Answer;
-		if ($model->load(Yii::$app->request->post())
-			&& $model->validate()) {
-			$model->save();
-			Yii::$app->session->close();
-			return $this->redirect('index.php?r=student/entry');//, ['model' => $model]);
-		} else {
-			return $this->render('answer', ['model' => $model]);
-		}
-    }
-
 }
-

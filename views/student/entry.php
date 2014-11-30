@@ -9,6 +9,8 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="student-entry">
 
+	<h1>Bienvenue sur DIANE !</h1>
+	<h2>Entre ton prénom et ta classe :</h2>
     <?php $form = ActiveForm::begin(); ?>
 
         <?= $form->field($model, 'first_name') ?>

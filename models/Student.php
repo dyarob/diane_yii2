@@ -55,4 +55,9 @@ class Student extends \yii\db\ActiveRecord
 	{
 		return $this->hasOne(Clas::className(), ['id' => 'id_class'])->where('year=:year', [':year' => date("Y")]);
 	}
+
+	public function getSeries()
+	{
+		return $this->clas->getSeries();
+	}
 }

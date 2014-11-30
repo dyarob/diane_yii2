@@ -46,4 +46,20 @@ class Clas extends \yii\db\ActiveRecord
             'year' => 'Year',
         ];
     }
+
+	public function getSeries()
+	{
+		$series = (new \yii\db\Query())
+			->select(['series.*'])
+			->from('series')
+			->innerjoin('series_class',
+				'series_class.id_serie = series.id'
+				)
+			->innerjoin('classes',
+				'series_class.id_class = classes.id'
+				)
+			->where(['classes.id' => $this->id])
+			->all();
+		return $series;
+	}
 }
