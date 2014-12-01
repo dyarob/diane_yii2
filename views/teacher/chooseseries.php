@@ -5,9 +5,7 @@ use yii\widgets\LinkPager;
 ?>
 <script type="text/javascript" src="js/showStudent.js"></script>
 <link rel="stylesheet" type="text/css" href="css/new.css">
-<h1>Mes élèves</h1>
-<hr />
-<h3>Classe X</h3>
+<h1>Gestion des series de problemes</h1>
 <hr />
 <div class="contents">
 <div class="column column-small">
@@ -15,13 +13,13 @@ use yii\widgets\LinkPager;
 
 		<?php
 		// ====================================
-		foreach ($students as $student):
+		foreach ($classes as $class):
 		// ====================================
 		?>
 
 		<li>
 		<p onclick="showStudent(<?= Html::encode(json_encode(
-			array('s' => $student->attributes,
+			array('s' => $class->attributes,
 				  'a' => $student->answers)
 				)) ?>)">
 			<?= Html::encode("{$student->first_name}") ?>

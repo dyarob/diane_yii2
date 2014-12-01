@@ -200,8 +200,24 @@ class TeacherController extends Controller
 
 	public function actionChooseseries()
 	{
-            return $this->render('chooseseries'
-            );
+		$model = Yii::$app->user->identity;
+		$query = Clas::find();
+		$pagination = new Pagination([
+			'defaultPageSize' => 20,
+			'totalCount' => $query->count(),
+		]);
+		$myClasses = $query
+			->where(['id_teacher' => Yii::$app->user->identity->id])
+			->offset($pagination->offset)
+			->limit($pagination->limit)
+			->orderBy('name')
+			->all();
+		return $this->render('chooseseries', [
+			'teacher' => $model,
+			'classes' => $myClasses,
+			'pagination' => $pagination,
+			'selectedStudent' => NULL,
+		]);
 	}
 
 }

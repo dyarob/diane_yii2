@@ -1,6 +1,5 @@
 <?php
 
-/*
 return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=vanneste',
@@ -8,8 +7,8 @@ return [
     'password' => 'password',
     'charset' => 'utf8',
 ];
- */
 
+/*
 return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=diane_adelie',
@@ -17,5 +16,6 @@ return [
     'password' => 'coucou',
     'charset' => 'utf8',
 ];
+ */
 
 ?>
