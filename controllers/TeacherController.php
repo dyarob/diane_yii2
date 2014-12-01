@@ -198,7 +198,11 @@ class TeacherController extends Controller
 		]);
     }
 
-
+	public function actionChooseseries()
+	{
+            return $this->render('chooseseries'
+            );
+	}
 
 }
 

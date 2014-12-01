@@ -163,6 +163,7 @@ class StudentController extends Controller
 	*/
     public function actionAnswer($id_serie)
     {
+/*
 		if ($id_serie != 0)
 		{
 			$serie = Serie::find()
@@ -177,22 +178,25 @@ class StudentController extends Controller
 			$id_serie = 0;
 		}
 		--$prob_counter;
+*/
 		$model = new Answer;
 		if ($model->load(Yii::$app->request->post()) && $model->validate())
 		{
 			$model->save();
-			if ($prob_counter <= 0)
-			{
+//			if ($prob_counter <= 0)
+//			{
 				Yii::$app->session->close();
 				return $this->redirect('index.php?r=student/entry');
-			}
+//			}
 		}
 		return $this->render('answer',
 				['model' => $model,
-				'problems' => $problems,
+/*				'problems' => $problems,
 				'serie' => $serie,
 				'prob_counter' => $prob_counter,
-				'id_serie' => $id_serie]);
+				'id_serie' => $id_serie
+*/
+				]);
     }
 
 }

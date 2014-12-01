@@ -39,7 +39,7 @@ AppAsset::register($this);
                     Yii::$app->user->isGuest ?
                         '':['label' => 'Tableau de bord', 'url' => ['/teacher/dashboard']],
                     Yii::$app->user->isGuest ?
-                        '':['label' => 'Choisir les series de problemes', 'url' => ['/teacher/chooseserie']],
+                        '':['label' => 'Choisir les series de problemes', 'url' => ['/teacher/chooseseries']],
                     Yii::$app->user->isGuest ?
                         ['label' => 'Entree des Professeurs', 'url' => ['/teacher/login']]:
                         ['label' => 'Logout (' . Yii::$app->user->identity->login . ')',

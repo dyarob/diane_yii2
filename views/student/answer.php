@@ -13,11 +13,15 @@ $_SESSION = Yii::$app->session;
 <div class="contents">
 <?php $form = ActiveForm::begin(['options' => ['name' => 'info']]); ?>
 <div class="column column-half">
-<?php print(ucfirst($_SESSION['first_name']));
+<p>
+<?php echo ('Bonjour ' . ucfirst($_SESSION['first_name']));
+/*
 echo $serie->name;
 echo $prob_counter;
 echo $id_serie;
+ */
 ?>
+</p>
 <p>Exercice No
 <!--<?php //echo ($_SESSION["totalExo"]-$nbExo+1); ?>-->
 </p>
