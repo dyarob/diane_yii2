@@ -27,10 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'id_answer',
-            'id_op_typ',
+            'op',
             'id_resol_typ',
             'miscalc',
             // 'formul',
+            // 'str',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

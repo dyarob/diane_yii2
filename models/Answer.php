@@ -75,7 +75,8 @@ class Answer extends \yii\db\ActiveRecord
 		{
 			$model = new AnswerSub;
 			$model->id_answer = $this->id;
-			$model->formul = $simpl_formula[0];
+			$model->str = $simpl_formula[0];
+			$model->analyse();
 			$model->save();
 			array_push($formulas, $model);
 		}
@@ -88,6 +89,7 @@ class Answer extends \yii\db\ActiveRecord
 	public function	analyse()//$nbs_problem)
 	{
 		$formulas = $this->find_simpl_for();
+		/*
 		$i = 0;
 		foreach ($formulas as $formula)
 		{
@@ -99,5 +101,6 @@ class Answer extends \yii\db\ActiveRecord
 			//$i++;
 		}
 		$this->full_exp = $this->simpl_fors_obj[$i - 1]->formul;
+		 */
 	}
 }

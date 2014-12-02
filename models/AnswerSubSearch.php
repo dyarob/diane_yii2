@@ -18,8 +18,8 @@ class AnswerSubSearch extends AnswerSub
     public function rules()
     {
         return [
-            [['id', 'id_answer', 'id_op_typ', 'id_resol_typ', 'miscalc'], 'integer'],
-            [['formul'], 'safe'],
+            [['id', 'id_answer', 'id_resol_typ', 'miscalc'], 'integer'],
+            [['op', 'formul', 'str'], 'safe'],
         ];
     }
 
@@ -54,12 +54,13 @@ class AnswerSubSearch extends AnswerSub
         $query->andFilterWhere([
             'id' => $this->id,
             'id_answer' => $this->id_answer,
-            'id_op_typ' => $this->id_op_typ,
             'id_resol_typ' => $this->id_resol_typ,
             'miscalc' => $this->miscalc,
         ]);
 
-        $query->andFilterWhere(['like', 'formul', $this->formul]);
+        $query->andFilterWhere(['like', 'op', $this->op])
+            ->andFilterWhere(['like', 'formul', $this->formul])
+            ->andFilterWhere(['like', 'str', $this->str]);
 
         return $dataProvider;
     }
