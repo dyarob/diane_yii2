@@ -131,18 +131,26 @@ class StudentController extends Controller
 			//valid data recieved in $model
 			// 1- Verify if the student already exists
 			$row = (new \yii\db\Query())
-				->select('*')
+				->select('id')
 				->from('students')
 				->where(['first_name' => $model->first_name,
 					'id_class' => $model->id_class])
-				->exists();
-			if ($row === FALSE)
+				->one();
 			// 2- If not, save the model (create it)
-			$model->save();
+			if ($row === FALSE)
+			{
+				$model->save();
+				$row = (new \yii\db\Query())
+					->select('id')
+					->from('students')
+					->where(['first_name' => $model->first_name,
+						'id_class' => $model->id_class])
+					->one();
+			}
+			$model->id = $row['id'];
 			// 3- Open session
 			$session = Yii::$app->session;
 			$session->open();
-			$session['first_name'] = $model->first_name;
 			$session['student'] = $model;
 			// 4- Redirect
 					return $this->redirect(['chooseserie']);
@@ -163,6 +171,7 @@ class StudentController extends Controller
 	*/
     public function actionAnswer($id_serie)
     {
+		$_SESSION = Yii::$app->session;
 /*
 		if ($id_serie != 0)
 		{
@@ -182,10 +191,13 @@ class StudentController extends Controller
 		$model = new Answer;
 		if ($model->load(Yii::$app->request->post()) && $model->validate())
 		{
+			$model->id_student = $_SESSION['student']->id;
+			$model->save();
+			$model->analyse();
 			$model->save();
 //			if ($prob_counter <= 0)
 //			{
-				Yii::$app->session->close();
+				//Yii::$app->session->close();
 				return $this->redirect('index.php?r=student/entry');
 //			}
 		}

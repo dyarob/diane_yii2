@@ -28,6 +28,15 @@ use yii\widgets\LinkPager;
 			<?= Html::encode("{$student->clas->name}") ?>
 		</p>
 		</li>
+	<?php
+		print_r($student->answers);
+		if ($student->answers)
+		{
+		preg_match_all("/\d+\s*[+*-\/]\s*\d+\s*=\s*\d+/",
+			$student->answers[0]['answer'], $simpl_formulas, PREG_SET_ORDER);
+		print_r($simpl_formulas);
+		}
+	?>
 		<?php endforeach; ?>
 
 	</ul>

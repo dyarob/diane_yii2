@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Answer;
-use app\models\AnswerSearch;
+use app\models\AnswerSub;
+use app\models\AnswerSubSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * AnswerController implements the CRUD actions for Answer model.
+ * AnswerSubController implements the CRUD actions for AnswerSub model.
  */
-class AnswerController extends Controller
+class AnswerSubController extends Controller
 {
     public function behaviors()
     {
@@ -27,12 +27,12 @@ class AnswerController extends Controller
     }
 
     /**
-     * Lists all Answer models.
+     * Lists all AnswerSub models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new AnswerSearch();
+        $searchModel = new AnswerSubSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -42,7 +42,7 @@ class AnswerController extends Controller
     }
 
     /**
-     * Displays a single Answer model.
+     * Displays a single AnswerSub model.
      * @param integer $id
      * @return mixed
      */
@@ -54,13 +54,13 @@ class AnswerController extends Controller
     }
 
     /**
-     * Creates a new Answer model.
+     * Creates a new AnswerSub model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Answer();
+        $model = new AnswerSub();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -72,7 +72,7 @@ class AnswerController extends Controller
     }
 
     /**
-     * Updates an existing Answer model.
+     * Updates an existing AnswerSub model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -91,7 +91,7 @@ class AnswerController extends Controller
     }
 
     /**
-     * Deletes an existing Answer model.
+     * Deletes an existing AnswerSub model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -99,5 +99,23 @@ class AnswerController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-	}
+
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Finds the AnswerSub model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return AnswerSub the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = AnswerSub::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
 }

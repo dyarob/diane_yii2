@@ -14,7 +14,7 @@ $_SESSION = Yii::$app->session;
 <?php $form = ActiveForm::begin(['options' => ['name' => 'info']]); ?>
 <div class="column column-half">
 <p>
-<?php echo ('Bonjour ' . ucfirst($_SESSION['first_name']));
+<?php echo ('Bonjour ' . ucfirst($_SESSION['student']->first_name));
 /*
 echo $serie->name;
 echo $prob_counter;
