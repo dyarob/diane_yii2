@@ -62,6 +62,11 @@ class Answer extends \yii\db\ActiveRecord
 		return $this->hasOne(Student::className(), ['id' => 'id_student']);
 	}
 
+	public function getSubanswers()
+	{
+		return $this->hasMany(AnswerSub::className(), ['id_answer' => 'id'])->AsArray();
+	}
+
 	// Genere des objets formules simples a partir de la chaine de caractere
 	// de la reponse.
 	// Outputs:

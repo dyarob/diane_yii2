@@ -12,12 +12,22 @@ function showStudent(studt) {
 	// New page elements filling
 	title.innerHTML = studt.s.first_name;
 	var i;
-	var l = studt.a.length;
+	// ATTENTION: ONE ENTRY ON TWO IS AN ANSWER,
+	// THE OTHER IS AN ARRAY OF SUBANSWERS.
+	var l = studt.a.length / 2;
 	var answers = new Array(l);
 	var correct_num = 0;
 	for (i = 0; i < l; ++i) {
 		answers[i] = document.createElement("p");
-		answers[i].innerHTML = studt.a[i].answer;
+		answers[i].innerHTML = studt.s.first_name;
+		answers[i].innerHTML += " a procédé de la manière suivante :<br />";
+		answers[i].innerHTML += "Sa résolution s'est faite en " +
+			studt.a[i*2 + 1].length +
+			((studt.a[i*2 + 1].length > 1)?
+				" calculs explicites.<br />":
+				" calcul explicite.<br />")
+			;
+		answers[i].innerHTML += studt.a[i*2].answer;
 		content.appendChild(answers[i]);
 		if (studt.a[i].correct === '1')
 			++correct_num;

@@ -47,8 +47,7 @@ class Student extends \yii\db\ActiveRecord
 
 	public function getAnswers()
 	{
-		return $this->hasMany(Answer::className(), ['id_student' => 'id'])
-			->asArray();
+		return $this->hasMany(Answer::className(), ['id_student' => 'id']);
 	}
 
 	public function getClas()

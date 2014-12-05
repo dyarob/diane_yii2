@@ -13,29 +13,32 @@ use yii\widgets\LinkPager;
 <div class="column column-small">
 	<ul>
 
-		<?php
-		// ====================================
-		foreach ($students as $student):
+	<?php
+	// ====================================
+	foreach ($students as $student):
+		// Getting answers in an array to be converted to json
+		$answers = array();
+		// THERE IS ONE ENTRY IN TWO FOR THE ANSWER
+		//							 FOR ITS SUBANSWERS
+		foreach($student->answers as $answer):
+			array_push($answers, $answer->attributes);
+			array_push($answers, $answer->subanswers);
+		endforeach;
 		// ====================================
 		?>
 
 		<li>
 		<p onclick="showStudent(<?= Html::encode(json_encode(
 			array('s' => $student->attributes,
-				  'a' => $student->answers)
+				  'a' => $answers
+			 	  )
 				)) ?>)">
 			<?= Html::encode("{$student->first_name}") ?>
 			<?= Html::encode("{$student->clas->name}") ?>
 		</p>
 		</li>
 	<?php
-		print_r($student->answers);
-		if ($student->answers)
-		{
-		preg_match_all("/\d+\s*[+*-\/]\s*\d+\s*=\s*\d+/",
-			$student->answers[0]['answer'], $simpl_formulas, PREG_SET_ORDER);
-		print_r($simpl_formulas);
-		}
+		//print_r($answers);
 	?>
 		<?php endforeach; ?>
 
