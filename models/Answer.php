@@ -66,9 +66,10 @@ class Answer extends \yii\db\ActiveRecord
 	// de la reponse.
 	// Outputs:
 	// - formules simples sous forme d'objects AnswerSub
-	public function	find_simpl_for()
+	public function	find_simpl_for($nbs_problem)
 	{
 		$formulas = array();
+		$simpl_fors = array();
 		preg_match_all("/\d+\s*[+*-\/]\s*\d+\s*=\s*\d+/",
 			$this->answer, $simpl_formulas, PREG_SET_ORDER);
 		foreach ($simpl_formulas as $simpl_formula)
@@ -76,9 +77,10 @@ class Answer extends \yii\db\ActiveRecord
 			$model = new AnswerSub;
 			$model->id_answer = $this->id;
 			$model->str = $simpl_formula[0];
-			$model->analyse();
+			$model->analyse($nbs_problem, $simpl_fors);
 			$model->save();
 			array_push($formulas, $model);
+			$simpl_fors[$model->result] = $model->formul;
 		}
 		return $formulas;
 	}
@@ -86,9 +88,9 @@ class Answer extends \yii\db\ActiveRecord
 	// Analyses a simple arithmetic problem answer.
 	// WORKS ONLY FOR ADDITIONS / SUBSTRACTIONS!
 	// NO NEGATIVE NUMBERS ALLOWED!
-	public function	analyse()//$nbs_problem)
+	public function	analyse($nbs_problem)//$nbs_problem)
 	{
-		$formulas = $this->find_simpl_for();
+		$formulas = $this->find_simpl_for($nbs_problem);
 		/*
 		$i = 0;
 		foreach ($formulas as $formula)

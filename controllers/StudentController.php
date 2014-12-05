@@ -188,12 +188,13 @@ class StudentController extends Controller
 		}
 		--$prob_counter;
 */
+		$nbs_problem = array('15'=>'N1', '24'=>'N2');
 		$model = new Answer;
 		if ($model->load(Yii::$app->request->post()) && $model->validate())
 		{
 			$model->id_student = $_SESSION['student']->id;
 			$model->save();
-			$model->analyse();
+			$model->analyse($nbs_problem);
 			$model->save();
 //			if ($prob_counter <= 0)
 //			{
