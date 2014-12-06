@@ -11,27 +11,66 @@ function showStudent(studt) {
 
 	// New page elements filling
 	title.innerHTML = studt.s.first_name;
-	var i;
+	var i; // main loop counter
+	var i2; // main loop counter * 2
+	var j; // subanswers counter
+	// array of html elements containing the answers:
+	// answers => graphical html element
+	// studt.a[] => data (with one on two counter)
+	var answers = new Array(l); 
+	// nbr of correct answers for percent display:
+	var correct_num = 0;
+	// nbr of intermediary calculation
+	var calc_num = 0;
 	// ATTENTION: ONE ENTRY ON TWO IS AN ANSWER,
 	// THE OTHER IS AN ARRAY OF SUBANSWERS.
 	var l = studt.a.length / 2;
-	var answers = new Array(l);
-	var correct_num = 0;
-	for (i = 0; i < l; ++i) {
+
+	// answers filling with diagnostic for each answer
+	for (i = 0, i2 = 0; i < l; ++i, i2+=2) {
 		answers[i] = document.createElement("p");
-		answers[i].innerHTML = studt.s.first_name;
-		answers[i].innerHTML += " a procédé de la manière suivante :<br />";
-		answers[i].innerHTML += "Sa résolution s'est faite en " +
-			studt.a[i*2 + 1].length +
-			((studt.a[i*2 + 1].length > 1)?
-				" calculs explicites.<br />":
-				" calcul explicite.<br />")
-			;
-		answers[i].innerHTML += studt.a[i*2].answer;
+		answers[i].innerHTML = "<hr />Réponse fournie : « " + studt.a[i*2].answer + " »<br />";
+		answers[i].innerHTML += studt.s.first_name;
+		calc_num = studt.a[i2 + 1].length;
+		// Si la reponse ne contient aucun calcul
+		if(!calc_num)
+			answers[i].innerHTML += " n'a pas répondu à la question.<br />";
+		// Sinon, on inscrit le diagnostic complet
+		else {
+			answers[i].innerHTML += " a procédé de la manière suivante :<br />";
+			answers[i].innerHTML += "Sa résolution s'est faîte en " +
+				calc_num +
+				((calc_num > 1)?
+					" calculs explicites.<br />":
+					" calcul explicite.<br />");
+			// diagnostic / sub answer
+			for (j = 1; j <= calc_num; ++j) {
+				if (j == 1) {
+					if (calc_num == 1)
+						answers[i].innerHTML += "Son calcul";
+					else
+						answers[i].innerHTML += "Son premier calcul";
+				}
+				else if (j == 2) 
+					answers[i].innerHTML += "Son deuxième calcul";
+				else if (j == 3) 
+					answers[i].innerHTML += "Son troisième calcul";
+				else if (j == 3)
+					answers[i].innerHTML += "Son troisième calcul";
+				else if (j >= 4)
+					answers[i].innerHTML += "Son calcul n°" + j;
+				answers[i].innerHTML += " a été ";
+				answers[i] = append_op_typ(answers[i], studt.a[i2 + 1][j - 1]);
+				answers[i].innerHTML += " sous la forme d'";
+				answers[i] = append_resol_typ(answers[i], studt.a[i2 + 1][j - 1]);
+				answers[i].innerHTML += ".<br />";
+			}
+			if (studt.a[i2].correct === '1')
+				++correct_num;
+		}
 		content.appendChild(answers[i]);
-		if (studt.a[i].correct === '1')
-			++correct_num;
 	}
+	
 	correct_num = correct_num * 100 / l;
 	percent_correct.innerHTML = Math.round(correct_num) + "% correct";
 	percent_correct.style.color = "green";
@@ -55,4 +94,52 @@ function showStudent(studt) {
 	percent.appendChild(percent_incorrect);
 	mydiv.appendChild(percent);
 	mydiv.appendChild(content);
+}
+
+function append_resol_typ(subanswer_node, subanswer_arr)
+{
+	switch (subanswer_arr.id_resol_typ) {
+		case "1":
+			subanswer_node.innerHTML += "une soustraction inverse";
+			break;
+		case "2":
+			subanswer_node.innerHTML += "une opération simple";
+			break;
+		case "3":
+			subanswer_node.innerHTML += "une addition à trou";
+			break;
+		case "4":
+			subanswer_node.innerHTML += "une soustraction à trou";
+			break;
+		case "5":
+			subanswer_node.innerHTML += "une opération ininterprétable";
+			break;
+		default:
+			subanswer_node.innerHTML += "une opération ininterprétable";
+	}
+	return (subanswer_node);
+}
+
+function append_op_typ(subanswer_node, subanswer_arr)
+{
+	switch (subanswer_arr.op) {
+		case "+":
+			subanswer_node.innerHTML += "une addition";
+			break;
+		case "-":
+			subanswer_node.innerHTML += "une soustraction";
+			break;
+		case "*":
+			subanswer_node.innerHTML += "une multiplication";
+			break;
+		case "/":
+			subanswer_node.innerHTML += "une division";
+			break;
+		case "%":
+			subanswer_node.innerHTML += "un modulo";
+			break;
+		default:
+			subanswer_node.innerHTML += "une opération ininterprétable";
+	}
+	return (subanswer_node);
 }
