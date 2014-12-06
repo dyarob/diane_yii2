@@ -29,12 +29,19 @@ function showStudent(studt) {
 	// answers filling with diagnostic for each answer
 	for (i = 0, i2 = 0; i < l; ++i, i2+=2) {
 		answers[i] = document.createElement("p");
-		answers[i].innerHTML = "<hr />Réponse fournie : « " + studt.a[i*2].answer + " »<br />";
+		answers[i].innerHTML = "<hr />Réponse fournie : « " + studt.a[i*2].answer + " »";
+		if (studt.a[i2].correct === '1') {
+			answers[i].innerHTML += " (bonne réponse) <br />";
+			++correct_num;
+		} else {
+			answers[i].innerHTML += " (mauvaise réponse) <br />";
+		}
 		answers[i].innerHTML += studt.s.first_name;
 		calc_num = studt.a[i2 + 1].length;
+
 		// Si la reponse ne contient aucun calcul
 		if(!calc_num)
-			answers[i].innerHTML += " n'a pas répondu à la question.<br />";
+			answers[i].innerHTML+= " n'a pas répondu à la question.";
 		// Sinon, on inscrit le diagnostic complet
 		else {
 			answers[i].innerHTML += " a procédé de la manière suivante :<br />";
@@ -44,33 +51,14 @@ function showStudent(studt) {
 					" calculs explicites.<br />":
 					" calcul explicite.<br />");
 			// diagnostic / sub answer
-			for (j = 1; j <= calc_num; ++j) {
-				if (j == 1) {
-					if (calc_num == 1)
-						answers[i].innerHTML += "Son calcul";
-					else
-						answers[i].innerHTML += "Son premier calcul";
-				}
-				else if (j == 2) 
-					answers[i].innerHTML += "Son deuxième calcul";
-				else if (j == 3) 
-					answers[i].innerHTML += "Son troisième calcul";
-				else if (j == 3)
-					answers[i].innerHTML += "Son troisième calcul";
-				else if (j >= 4)
-					answers[i].innerHTML += "Son calcul n°" + j;
-				answers[i].innerHTML += " a été ";
-				answers[i] = append_op_typ(answers[i], studt.a[i2 + 1][j - 1]);
-				answers[i].innerHTML += " sous la forme d'";
-				answers[i] = append_resol_typ(answers[i], studt.a[i2 + 1][j - 1]);
-				answers[i].innerHTML += ".<br />";
-			}
-			if (studt.a[i2].correct === '1')
-				++correct_num;
+			for (j = 1; j <= calc_num; ++j)
+				answers[i] = append_subanswer_diag(answers[i],
+									calc_num, studt.a[i2+1][j-1],
+									studt.s.first_name, j);
 		}
 		content.appendChild(answers[i]);
 	}
-	
+
 	correct_num = correct_num * 100 / l;
 	percent_correct.innerHTML = Math.round(correct_num) + "% correct";
 	percent_correct.style.color = "green";
@@ -94,6 +82,40 @@ function showStudent(studt) {
 	percent.appendChild(percent_incorrect);
 	mydiv.appendChild(percent);
 	mydiv.appendChild(content);
+}
+
+function append_subanswer_diag(answer_node, calc_num, subanswer_arr, first_name, j)
+{
+	answer_node = append_which_calcul(answer_node, j, calc_num);
+	answer_node.innerHTML += " a été ";
+	answer_node = append_op_typ(answer_node, subanswer_arr);
+	answer_node.innerHTML += " sous la forme d'";
+	answer_node = append_resol_typ(answer_node, subanswer_arr);
+	answer_node.innerHTML += ". ";
+	answer_node = append_miscalc(answer_node,
+							subanswer_arr.miscalc,
+							first_name);
+	answer_node.innerHTML += "<br />";
+	return (answer_node);
+}
+
+function append_which_calcul(subanswer_node, j, calc_num)
+{
+	if (j == 1) {
+		if (calc_num == 1)
+			subanswer_node.innerHTML += "Son calcul";
+		else
+			subanswer_node.innerHTML += "Son premier calcul";
+	}
+	else if (j == 2) 
+		subanswer_node.innerHTML += "Son deuxième calcul";
+	else if (j == 3) 
+		subanswer_node.innerHTML += "Son troisième calcul";
+	else if (j == 3)
+		subanswer_node.innerHTML += "Son troisième calcul";
+	else if (j >= 4)
+		subanswer_node.innerHTML += "Son calcul n°" + j;
+	return (subanswer_node);
 }
 
 function append_resol_typ(subanswer_node, subanswer_arr)
@@ -140,6 +162,16 @@ function append_op_typ(subanswer_node, subanswer_arr)
 			break;
 		default:
 			subanswer_node.innerHTML += "une opération ininterprétable";
+	}
+	return (subanswer_node);
+}
+
+function append_miscalc(subanswer_node, miscalc, first_name)
+{
+	if (miscalc > 0) {
+		subanswer_node.innerHTML += first_name
+			+ " a effectué une erreur de calcul de "
+			+ miscalc + " sur cette opération.";
 	}
 	return (subanswer_node);
 }
