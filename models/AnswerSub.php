@@ -220,12 +220,15 @@ class AnswerSub extends \yii\db\ActiveRecord
 			foreach ($nbs as $nb2 => $exp2) {
 				if ($n == $nb1 + $nb2) {
 					$this->create_answersub("+", $n, $exp1, $exp2);
+					return ;
 				}
 				else if ($n == $nb1 - $nb2) {
 					$this->create_answersub("-", $n, $exp1, $exp2);
+					return ;
 				}
 				else if ($n == $nb2 - $nb1) {
 					$this->create_answersub("-", $n, $exp2, $exp1);
+					return ;
 				}
 			}
 		}

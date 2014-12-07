@@ -22,6 +22,8 @@ function showStudent(studt) {
 	var correct_num = 0;
 	// nbr of intermediary calculation
 	var calc_num = 0;
+	var expl_num = 0;
+	var ment_num = 0;
 	// ATTENTION: ONE ENTRY ON TWO IS AN ANSWER,
 	// THE OTHER IS AN ARRAY OF SUBANSWERS.
 	var l = studt.a.length / 2;
@@ -38,6 +40,14 @@ function showStudent(studt) {
 		}
 		answers[i].innerHTML += studt.s.first_name;
 		calc_num = studt.a[i2 + 1].length;
+		ment_num = 0;
+		expl_num = 0;
+		for (j = 0; j < calc_num; ++j) {
+			if (studt.a[i2+1][j].id_resol_typ == "6")
+				++ment_num;
+			else
+				++expl_num;
+		}
 
 		// Si la reponse ne contient aucun calcul
 		if(!calc_num)
@@ -46,10 +56,16 @@ function showStudent(studt) {
 		else {
 			answers[i].innerHTML += " a procédé de la manière suivante :<br />";
 			answers[i].innerHTML += "Sa résolution s'est faîte en " +
-				calc_num +
-				((calc_num > 1)?
-					" calculs explicites.<br />":
-					" calcul explicite.<br />");
+				expl_num +
+				((expl_num > 1)?
+					" calculs explicites":
+					" calcul explicite");
+			if (ment_num >= 1)
+				answers[i].innerHTML += " et " + ment_num +
+					((ment_num > 1)?
+						" calculs mentaux":
+						" calcul mental");
+			answers[i].innerHTML += ".<br />";
 			// diagnostic / sub answer
 			for (j = 1; j <= calc_num; ++j)
 				answers[i] = append_subanswer_diag(answers[i],
@@ -135,6 +151,9 @@ function append_resol_typ(subanswer_node, subanswer_arr)
 			break;
 		case "5":
 			subanswer_node.innerHTML += "une opération ininterprétable";
+			break;
+		case "6":
+			subanswer_node.innerHTML += "une opération mentale inconnue";
 			break;
 		default:
 			subanswer_node.innerHTML += "une opération ininterprétable";
