@@ -38,7 +38,6 @@ class StudentController extends Controller
     {
         $searchModel = new StudentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -65,7 +64,6 @@ class StudentController extends Controller
     public function actionCreate()
     {
         $model = new Student();
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -84,7 +82,6 @@ class StudentController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -103,7 +100,6 @@ class StudentController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
@@ -188,7 +184,7 @@ class StudentController extends Controller
 		}
 		--$prob_counter;
 */
-		$nbs_problem = array('15'=>'N1', '24'=>'N2');
+		$nbs_problem = array('15'=>'N1', '24'=>'N2', '1'=>'un');
 		$model = new Answer;
 		if ($model->load(Yii::$app->request->post()) && $model->validate())
 		{

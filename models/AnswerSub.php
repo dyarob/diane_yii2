@@ -17,17 +17,24 @@ use Yii;
  */
 class AnswerSub extends \yii\db\ActiveRecord
 {
-	public					$nbs;
+	public					$nbs;		// all the numbers in the expression
+										// prior to any treatment
+	public					$operands;	// array like ['left'] => left operand,
+										//			  ['right'] => right operand
 	public					$result;
+	public					$simpl_fors;
 
 
 	public function			analyse($nbs_problem, $simpl_fors)
 	{
+		$this->simpl_fors = $simpl_fors;
 		preg_match_all("/\d+/", $this->str, $nbs);
 		$this->nbs = $nbs[0];
 		$this->find_op();
-		$this->find_resol_typ($nbs_problem, $simpl_fors);
+		$this->find_resol_typ($nbs_problem);
 		$this->find_miscalc();
+		$this->create_formula($nbs_problem);
+		return ($this->simpl_fors);
 	}
 
 	// Computes;
@@ -52,85 +59,189 @@ class AnswerSub extends \yii\db\ActiveRecord
 	// $nbs_problem a la forme " x, y, z,"
 	// pour faciliter la reconnaissance des nombres
 	// et ne pas confondre 4 et 45 par exemple.
-	private function	find_resol_typ($nbs_problem, $simpl_fors)
+	private function	find_resol_typ($nbs_problem)
 	{
 		$is_nb0 = array_key_exists($this->nbs[0], $nbs_problem);
 		if ($is_nb0 === FALSE)
-			$is_nb0 = array_key_exists($this->nbs[0], $simpl_fors);
+			$is_nb0 = array_key_exists($this->nbs[0], $this->simpl_fors);
 		$is_nb1 = array_key_exists($this->nbs[1], $nbs_problem);
 		if ($is_nb1 === FALSE)
-			$is_nb1 = array_key_exists($this->nbs[1], $simpl_fors);
+			$is_nb1 = array_key_exists($this->nbs[1], $this->simpl_fors);
+		$is_nb2 = array_key_exists($this->nbs[2], $nbs_problem);
+		if ($is_nb2 === FALSE)
+			$is_nb2 = array_key_exists($this->nbs[2], $this->simpl_fors);
+
+/*
 		// Test de la substraction inverse
-		if ($this->op === "-" && $this->nbs[0] < $this->nbs[1])
-		{
+		if ($this->op === "-" && $this->nbs[0] < $this->nbs[1]) {
 			$this->id_resol_typ = 1; // soustraction inverse
 			$this->result = $this->nbs[2];
 			$this->formul = $nbs_problem[$this->nbs[1]] . $this->formul;
 			$this->formul .= $nbs_problem[$this->nbs[0]];
 		}
-		// Reste
-		else if ($is_nb0 !== FALSE)
+*/
+
+		switch (TRUE)								// isnb0|isnb1|isnb2
 		{
-			if ($is_nb1 !== FALSE)
-			{
-				$this->id_resol_typ = 2; // operation simple
-				$this->result = $this->nbs[2];
-				if (array_key_exists($this->nbs[0], $nbs_problem) !== FALSE)
-					$this->formul = $nbs_problem[$this->nbs[0]] . $this->formul;
-				else
-					$this->formul = "(" . $simpl_fors[$this->nbs[0]] . ")" . $this->formul;
-				if (array_key_exists($this->nbs[1], $nbs_problem) !== FALSE)
-					$this->formul .= $nbs_problem[$this->nbs[1]];
-				else
-					$this->formul .= "(" . $simpl_fors[$this->nbs[1]] . ")";
+		case (!$is_nb0 && !$is_nb1 && !$is_nb2):	// FALSE FALSE FALSE
+			$this->detect_mental_calcul($this->nbs[0], $nbs_problem);
+			if (isset($this->simpl_fors[$this->nbs[0]])) {
+				$this->find_resol_typ($nbs_problem);
+				return ; }
+			$this->detect_mental_calcul($this->nbs[1], $nbs_problem);
+			if (isset($this->simpl_fors[$this->nbs[1]])) {
+				$this->find_resol_typ($nbs_problem);
+				return ; }
+			$this->detect_mental_calcul($this->nbs[2], $nbs_problem);
+			if (isset($this->simpl_fors[$this->nbs[2]])) {
+				$this->find_resol_typ($nbs_problem);
+				return ; }
+			$this->id_resol_typ = 5;
+			$this->result = $this->nbs[2];
+			return ;
+
+		case ($is_nb0 && !$is_nb1 && !$is_nb2):		// TRUE  FALSE FALSE
+			$this->detect_mental_calcul($this->nbs[1]);
+			if (isset($this->simpl_fors[$this->nbs[1]])) {
+				$this->find_resol_typ($nbs_problem);
+				return ; }
+			$this->detect_mental_calcul($this->nbs[2]);
+			if (isset($this->simpl_fors[$this->nbs[2]])) {
+				$this->find_resol_typ($nbs_problem);
+				return ; }
+			$this->id_resol_typ = 5;
+			$this->result = $this->nbs[2];
+			return ;
+
+		case (!$is_nb0 && $is_nb1 && !$is_nb2):		// FALSE TRUE  FALSE
+			$this->detect_mental_calcul($this->nbs[0], $nbs_problem);
+			if (isset($this->simpl_fors[$this->nbs[0]])) {
+				$this->find_resol_typ($nbs_problem);
+				return ; }
+			$this->detect_mental_calcul($this->nbs[2], $nbs_problem);
+			if (isset($this->simpl_fors[$this->nbs[2]])) {
+				$this->find_resol_typ($nbs_problem);
+				return ; }
+			$this->id_resol_typ = 5;
+			$this->result = $this->nbs[2];
+			return ;
+
+		case (!$is_nb0 && !$is_nb1 && $is_nb2):		// FALSE FALSE TRUE
+			$this->detect_mental_calcul($this->nbs[0], $nbs_problem);
+			if (isset($this->simpl_fors[$this->nbs[0]])) {
+				$this->find_resol_typ($nbs_problem);
+				return ; }
+			$this->detect_mental_calcul($this->nbs[1], $nbs_problem);
+			if (isset($this->simpl_fors[$this->nbs[1]])) {
+				$this->find_resol_typ($nbs_problem);
+				return ; }
+			$this->id_resol_typ = 5;
+			$this->result = $this->nbs[2];
+			return ;
+
+		case (!$is_nb0 && $is_nb1 && $is_nb2):		// FALSE TRUE  TRUE
+			$this->operands['left'] = $this->nbs[2];
+			$this->operands['right'] = $this->nbs[1];
+			$this->result = $this->nbs[0];
+			switch ($this->op) {
+			case "+":
+				$this->id_resol_typ = 3; // addition a trou
+				$this->op = "-";
+				return ;
+			case "-":
+				$this->id_resol_typ = 4; // soustraction a trou
+				$this->op = "+";
+				return ;
 			}
-			else
-			{
+			break;
+
+		case ($is_nb0 && !$is_nb1 && $is_nb2):		// TRUE  FALSE TRUE
+			switch ($this->op) {
+			case "+":
+				$this->operands['left'] = $this->nbs[2];
+				$this->operands['right'] = $this->nbs[0];
 				$this->result = $this->nbs[1];
-				// Test de la soustraction par l'addition a trou
-				if ($this->op === "+")
-				{
-					$this->op = "-";
-					$this->id_resol_typ = 3; // addition a trou
-					$this->formul = $nbs_problem[$this->nbs[2]] . " - ";
-					$this->formul .= $nbs_problem[$this->nbs[0]];
-				}
-				else	// soustraction a trou standard
-				{
-					$this->id_resol_typ = 4; // soustraction a trou
-					$this->formul = $nbs_problem[$this->nbs[0]] . $this->formul;
-					$this->formul .= $nbs_problem[$this->nbs[2]];
-				}
+				$this->id_resol_typ = 3; // addition a trou
+				$this->op = "-";
+				return ;
+			case "-":
+				$this->operands['left'] = $this->nbs[0];
+				$this->operands['right'] = $this->nbs[2];
+				$this->result = $this->nbs[1];
+				$this->id_resol_typ = 4; // soustraction a trou
+				return ;
 			}
+			break;
+
+		case ($is_nb0 && $is_nb1 && !$is_nb2):		// TRUE  TRUE  FALSE
+			$this->operands['left'] = $this->nbs[0];
+			$this->operands['right'] = $this->nbs[1];
+			$this->result = $this->nbs[2];
+			switch ($this->op) {
+			case "+":
+				$this->id_resol_typ = 2;
+				return ;
+			case "-":
+				$this->id_resol_typ = 2;
+				return ;
+			}
+			break;
+
+		case ($is_nb0 && $is_nb1 && $is_nb2):		// TRUE  TRUE  TRUE
+			$this->id_resol_typ = 2;
+			$this->result = $this->nbs[2];
+			return ;
 		}
+	}
+
+	private function	create_formula($nbs_problem)
+	{
+		if (!isset($this->operands['left']))
+			$this->formul = $this->nbs[0] . $this->formul;
+		else if (isset($nbs_problem[$this->operands['left']]))
+			$this->formul = $nbs_problem[$this->operands['left']] . $this->formul;
 		else
-		{
-			if ($is_nb1 !== FALSE)
-			{
-				$this->result = $this->nbs[0];
-				// Test de l'addition par la soustraction a trou
-				if ($this->op === "-")
-				{
-					$this->op = "+";
-					$this->id_resol_typ = 4; // soustraction a trou
-					$this->formul = $nbs_problem[$this->nbs[2]] . " + ";
-					$this->formul .= $nbs_problem[$this->nbs[1]];
+			$this->formul = "(" . $this->simpl_fors[$this->operands['left']] . ")" . $this->formul;
+		if (!isset($this->operands['right']))
+			$this->formul .= $this->nbs[1];
+		else if (isset($nbs_problem[$this->operands['right']]))
+			$this->formul .= $nbs_problem[$this->operands['right']];
+		else
+			$this->formul .= "(" . $this->simpl_fors[$this->operands['right']] . ")";
+	}
+
+	// To be modified in order to add more operations.
+	// (or just make it better with tables and structures)
+	private function	detect_mental_calcul($n, $nbs_problems)
+	{
+		$nbs = $nbs_problems;
+		array_merge($nbs, $this->simpl_fors);
+		foreach ($nbs as $nb1 => $exp1) {
+			foreach ($nbs as $nb2 => $exp2) {
+				if ($n == $nb1 + $nb2) {
+					$this->create_answersub("+", $n, $exp1, $exp2);
 				}
-				// Test de la soustraction par l'addition a trou
-				else if ($this->op === "+")
-				{
-					$this->op = "-";
-					$this->id_resol_typ = 3; //addition a trou
-					$this->formul = $nbs_problem[$this->nbs[2]] . " - ";
-					$this->formul .= $nbs_problem[$this->nbs[1]];
+				else if ($n == $nb1 - $nb2) {
+					$this->create_answersub("-", $n, $exp1, $exp2);
 				}
-			}
-			else
-			{
-				$this->id_resol_typ = 5;
-				$this->result = $this->nbs[2];
+				else if ($n == $nb2 - $nb1) {
+					$this->create_answersub("-", $n, $exp2, $exp1);
+				}
 			}
 		}
+	}
+
+	public function	create_answersub($op, $n, $exp1, $exp2)
+	{
+		$model = new AnswerSub;
+		$model->id_answer = $this->id_answer;
+		$model->op = $op;
+		$model->id_resol_typ = 6; // calcul mental / resol type inconnu
+		$model->miscalc = 0;
+		$model->str = (string)$n;
+		$model->formul = $exp1 . " " . $op . " " . $exp2;
+		$this->simpl_fors[$n] = $model->formul;
+		$model->save();
 	}
 
 	// Outputs:
@@ -140,23 +251,13 @@ class AnswerSub extends \yii\db\ActiveRecord
 		switch($this->op)
 		{
 			case "+" :
-				if ($this->id_resol_typ === 4) // soustraction a trou
-					$this->miscalc =
-						abs((int)$this->nbs[2] - (int)$this->nbs[0] + (int)$this->nbs[1]);
-				else
-					$this->miscalc =
-						abs((int)$this->nbs[2] - (int)$this->nbs[0] - (int)$this->nbs[1]);
+				$this->miscalc = abs(($this->operands['left'] + $this->operands['right'])
+									- $this->result);
 				break;
 			case "-" :
-				if ($this->id_resol_typ === 3) // addition a trou
-					$this->miscalc =
-						abs((int)$this->nbs[2] - (int)$this->nbs[0] - (int)$this->nbs[1]);
-				else if ($this->id_resol_typ === 1) // soustraction inverse
-					$this->miscalc =
-						abs((int)$this->nbs[2] - (int)$this->nbs[1] + (int)$this->nbs[0]);
-				else
-					$this->miscalc =
-						abs((int)$this->nbs[2] - (int)$this->nbs[0] + (int)$this->nbs[1]);
+				$this->miscalc = abs(($this->operands['left'] - $this->operands['right'])
+									- $this->result);
+				break;
 		}
 	}
 
