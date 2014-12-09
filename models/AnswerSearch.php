@@ -18,8 +18,8 @@ class AnswerSearch extends Answer
     public function rules()
     {
         return [
-            [['id', 'id_problem', 'op_type', 'resol_type', 'miscalc'], 'integer'],
-            [['answer'], 'safe'],
+            [['id', 'id_student', 'id_problem', 'miscalc', 'correct', 'id_strategy'], 'integer'],
+            [['answer', 'formul'], 'safe'],
         ];
     }
 
@@ -53,13 +53,15 @@ class AnswerSearch extends Answer
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'id_student' => $this->id_student,
             'id_problem' => $this->id_problem,
-            'op_type' => $this->op_type,
-            'resol_type' => $this->resol_type,
             'miscalc' => $this->miscalc,
+            'correct' => $this->correct,
+            'id_strategy' => $this->id_strategy,
         ]);
 
-        $query->andFilterWhere(['like', 'answer', $this->answer]);
+        $query->andFilterWhere(['like', 'answer', $this->answer])
+            ->andFilterWhere(['like', 'formul', $this->formul]);
 
         return $dataProvider;
     }

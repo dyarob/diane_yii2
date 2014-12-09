@@ -17,15 +17,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
+    <?= $form->field($model, 'id_student') ?>
+
     <?= $form->field($model, 'id_problem') ?>
 
     <?= $form->field($model, 'answer') ?>
 
-    <?= $form->field($model, 'op_type') ?>
+    <?= $form->field($model, 'miscalc') ?>
 
-    <?= $form->field($model, 'resol_type') ?>
+    <?php // echo $form->field($model, 'correct') ?>
 
-    <?php // echo $form->field($model, 'miscalc') ?>
+    <?php // echo $form->field($model, 'formul') ?>
+
+    <?php // echo $form->field($model, 'id_strategy') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

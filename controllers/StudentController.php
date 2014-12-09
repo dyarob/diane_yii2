@@ -168,7 +168,7 @@ class StudentController extends Controller
     public function actionAnswer($id_serie)
     {
 		$_SESSION = Yii::$app->session;
-/*
+/**/
 		if ($id_serie != 0)
 		{
 			$serie = Serie::find()
@@ -183,7 +183,7 @@ class StudentController extends Controller
 			$id_serie = 0;
 		}
 		--$prob_counter;
-*/
+/**/
 		$nbs_problem = array('15'=>'N1', '24'=>'N2', '1'=>'un');
 		$model = new Answer;
 		if ($model->load(Yii::$app->request->post()) && $model->validate())
@@ -200,8 +200,8 @@ class StudentController extends Controller
 		}
 		return $this->render('answer',
 				['model' => $model,
-/*				'problems' => $problems,
-				'serie' => $serie,
+				'problems' => $problems,
+/*				'serie' => $serie,
 				'prob_counter' => $prob_counter,
 				'id_serie' => $id_serie
 */
