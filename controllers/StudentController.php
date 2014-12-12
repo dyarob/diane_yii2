@@ -158,8 +158,15 @@ class StudentController extends Controller
 
 	public function actionChooseserie()
 	{
-		if (isset($_POST['serie1']))
-			return $this->redirect(['answer', 'id_serie' => 1]);
+		$button_used = array_keys($_POST);
+		if (isset($button_used[0]))
+		{
+			$serie = Serie::find()
+				->where(['name' => $button_used[1]])
+				->one();
+			if ($serie)
+				return $this->redirect(['answer', 'id_serie' => $serie->id]);
+		}
 		return $this->render('chooseserie');
 	}
 
@@ -179,12 +186,19 @@ class StudentController extends Controller
 			->where(['id_serie' => $id_serie])
 			->all();
 /**/
-		$nbs_problem = array('15'=>'N1', '24'=>'N2', '1'=>'un');
 		$model = new Answer;
 		if ($model->load(Yii::$app->request->post()) && $model->validate())
 		{
 			$_SESSION['prob_count'] += 1;
 			$model->id_student = $_SESSION['student']->id;
+			$nbs_problem = array('15'=>'N1', '24'=>'N2', '1'=>'un');
+			/*preg_match_all(
+				'/\'(?<key>\w+)\'\=\>\'(?<value>\w+)\'/',
+				$problems[$_SESSION['prob_count']]['numbers'],
+				$nbs_problem);
+			$nbs_problem = array_combine($nbs_problem['key'], $nbs_problem['value']);
+			 */
+			$model->save();
 			$model->analyse($nbs_problem);
 			$model->save();
 			if ($_SESSION['prob_count'] >= $serie->nbr_of_problems)
@@ -200,6 +214,4 @@ class StudentController extends Controller
 				'serie' => $serie,
 				]);
     }
-
 }
-
