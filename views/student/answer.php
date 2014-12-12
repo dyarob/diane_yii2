@@ -15,6 +15,7 @@ $_SESSION = Yii::$app->session;
 <div class="column column-half">
 <p>
 <?php echo ('Bonjour ' . ucfirst($_SESSION['student']->first_name));
+echo ('Bonjour ' . ucfirst($_SESSION['prob_count']));
 /*
 echo $serie->name;
 echo $prob_counter;
@@ -28,7 +29,9 @@ echo $id_serie;
 
 <p>
 <?php
-$text = "Maurice a 15 vaches. Il se marie avec Jacquotte, qui vit dans la ferme voisine. Ils decident de faire paitre leurs vaches dans le meme pre. Maintenant, il y a 24 vaches qui paissent dans le pre. Combien de vaches Jacquotte a apportee en dot ?";//$problem['statement'];
+$text =
+	//"Maurice a 15 vaches. Il se marie avec Jacquotte, qui vit dans la ferme voisine. Ils decident de faire paitre leurs vaches dans le meme pre. Maintenant, il y a 24 vaches qui paissent dans le pre. Combien de vaches Jacquotte a apportee en dot ?";
+	$problems[$_SESSION['prob_count']]['statement'];
 $idpbm = 1;//$problem['id'];
 $id = 0;
 for($piece = strtok($text, " "), $i=1 ; $piece != "" ; $piece = strtok(" "))

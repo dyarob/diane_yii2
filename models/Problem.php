@@ -29,7 +29,7 @@ class Problem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_serie', 'statement', 'numbers'], 'required'],
+            [['id_serie'], 'integer'],
             [['statement'], 'string', 'max' => 600],
             [['properties'], 'string', 'max' => 100],
             [['numbers'], 'string', 'max' => 40]
@@ -43,7 +43,7 @@ class Problem extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-			'id_serie' => 'Id Serie',
+            'id_serie' => 'Id Serie',
             'statement' => 'Statement',
             'properties' => 'Properties',
             'numbers' => 'Numbers',

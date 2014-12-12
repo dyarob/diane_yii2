@@ -18,7 +18,7 @@ class ProblemSearch extends Problem
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'id_serie'], 'integer'],
             [['statement', 'properties', 'numbers'], 'safe'],
         ];
     }
@@ -53,6 +53,7 @@ class ProblemSearch extends Problem
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'id_serie' => $this->id_serie,
         ]);
 
         $query->andFilterWhere(['like', 'statement', $this->statement])

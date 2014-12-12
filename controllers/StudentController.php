@@ -148,8 +148,9 @@ class StudentController extends Controller
 			$session = Yii::$app->session;
 			$session->open();
 			$session['student'] = $model;
+			$session['prob_count'] = 0;	//nbr of answered problems
 			// 4- Redirect
-					return $this->redirect(['chooseserie']);
+			return $this->redirect(['chooseserie']);
 		} else {
 			return $this->render('entry', ['model' => $model]);
 		}
@@ -169,42 +170,34 @@ class StudentController extends Controller
     {
 		$_SESSION = Yii::$app->session;
 /**/
-		if ($id_serie != 0)
-		{
-			$serie = Serie::find()
-				->where(['id' => $id_serie])
-				->one();
-			$problems = (new \yii\db\Query())
-				->select('*')
-				->from('problems')
-				->where(['id_serie' => $id_serie])
-				->all();
-			$prob_counter = $serie->nbr_of_problems;
-			$id_serie = 0;
-		}
-		--$prob_counter;
+		$serie = Serie::find()
+			->where(['id' => $id_serie])
+			->one();
+		$problems = (new \yii\db\Query())
+			->select('*')
+			->from('problems')
+			->where(['id_serie' => $id_serie])
+			->all();
 /**/
 		$nbs_problem = array('15'=>'N1', '24'=>'N2', '1'=>'un');
 		$model = new Answer;
 		if ($model->load(Yii::$app->request->post()) && $model->validate())
 		{
+			$_SESSION['prob_count'] += 1;
 			$model->id_student = $_SESSION['student']->id;
-			$model->save();
 			$model->analyse($nbs_problem);
 			$model->save();
-//			if ($prob_counter <= 0)
-//			{
-				//Yii::$app->session->close();
+			if ($_SESSION['prob_count'] >= $serie->nbr_of_problems)
+			{
+				Yii::$app->session->close();
 				return $this->redirect('index.php?r=student/entry');
-//			}
+			}
+			return $this->redirect(['answer', 'id_serie' => 1]);
 		}
 		return $this->render('answer',
 				['model' => $model,
 				'problems' => $problems,
-/*				'serie' => $serie,
-				'prob_counter' => $prob_counter,
-				'id_serie' => $id_serie
-*/
+				'serie' => $serie,
 				]);
     }
 
