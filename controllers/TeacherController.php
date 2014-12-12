@@ -7,6 +7,7 @@ use app\models\Teacher;
 use app\models\TeacherSearch;
 use app\models\TeacherLoginForm;
 use app\models\Student;
+use app\models\Clas;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,7 +38,6 @@ class TeacherController extends Controller
     {
         $searchModel = new TeacherSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -64,7 +64,6 @@ class TeacherController extends Controller
     public function actionCreate()
     {
         $model = new Teacher();
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -83,7 +82,6 @@ class TeacherController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -102,7 +100,6 @@ class TeacherController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
@@ -126,7 +123,6 @@ class TeacherController extends Controller
     public function actionSignup()
     {
 	$model = new Teacher();
-
 	if ($model->load(Yii::$app->request->post())) {
 	    if ($model->validate()) {
 	        // form inputs are valid, do something here
@@ -165,7 +161,6 @@ class TeacherController extends Controller
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
         $model = new TeacherLoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
 		return $this->redirect(['dashboard']);

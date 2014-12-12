@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 ?>
-<script type="text/javascript" src="js/showStudent.js"></script>
+<script type="text/javascript" src="js/series_class.js"></script>
 <link rel="stylesheet" type="text/css" href="css/new.css">
 <h1>Gestion des series de problemes</h1>
 <hr />
@@ -18,12 +18,12 @@ use yii\widgets\LinkPager;
 		?>
 
 		<li>
-		<p onclick="showStudent(<?= Html::encode(json_encode(
-			array('s' => $class->attributes,
-				  'a' => $student->answers)
+		<p onclick="showStudent(<?= Html::encode(json_encode($class->attributes
+			//array('c' => $class->attributes,
+				  //'a' => $student->answers)
 				)) ?>)">
-			<?= Html::encode("{$student->first_name}") ?>
-			<?= Html::encode("{$student->clas->name}") ?>
+			<?= Html::encode("{$class->name}") ?>
+			<?= Html::encode("{$class->year}") ?>
 		</p>
 		</li>
 		<?php endforeach; ?>
@@ -32,6 +32,6 @@ use yii\widgets\LinkPager;
 	<?= LinkPager::widget(['pagination' => $pagination]) ?>
 </div>
 <div class="column column-big" id="txtHint">
-	<p>Sélectionnez un élève pour voir son resumé</p>
+	<p>Sélectionnez une classe pour lui affecter des séries de problèmes.</p>
 </div>
 </div>
