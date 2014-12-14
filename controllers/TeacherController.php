@@ -8,6 +8,7 @@ use app\models\TeacherSearch;
 use app\models\TeacherLoginForm;
 use app\models\Student;
 use app\models\Clas;
+use app\models\Serie;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -195,7 +196,6 @@ class TeacherController extends Controller
 
 	public function actionChooseseries()
 	{
-		$model = Yii::$app->user->identity;
 		$query = Clas::find();
 		$pagination = new Pagination([
 			'defaultPageSize' => 20,
@@ -207,9 +207,11 @@ class TeacherController extends Controller
 			->limit($pagination->limit)
 			->orderBy('name')
 			->all();
+		$series = Serie::find()
+			->all;
 		return $this->render('chooseseries', [
-			'teacher' => $model,
 			'classes' => $myClasses,
+			'series' => $series,
 			'pagination' => $pagination,
 			'selectedStudent' => NULL,
 		]);

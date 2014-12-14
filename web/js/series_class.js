@@ -12,7 +12,8 @@ function showStudent(clas) {
 	*/
 
 	// New page elements filling
-	title.innerHTML = clas.name;
+	title.innerHTML = clas.c.name;
+	title.innerHTML += clas.s[0].name;
 
 	/*
 	var i; // main loop counter

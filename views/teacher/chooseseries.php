@@ -18,9 +18,10 @@ use yii\widgets\LinkPager;
 		?>
 
 		<li>
-		<p onclick="showStudent(<?= Html::encode(json_encode($class->attributes
-			//array('c' => $class->attributes,
-				  //'a' => $student->answers)
+		<p onclick="showStudent(<?= Html::encode(json_encode(
+			//$class->attributes
+			array('c' => $class->attributes,
+				  's' => $class->series)
 				)) ?>)">
 			<?= Html::encode("{$class->name}") ?>
 			<?= Html::encode("{$class->year}") ?>
@@ -33,5 +34,12 @@ use yii\widgets\LinkPager;
 </div>
 <div class="column column-big" id="txtHint">
 	<p>Sélectionnez une classe pour lui affecter des séries de problèmes.</p>
+
+	<?php $form = ActiveForm::begin();
+	foreach ($series as $serie):
+	?>
+		<?= Html::checkbox($serie->name, false) ?>
+	<?php endforeach;
+	ActiveForm::end(); ?>
 </div>
 </div>
