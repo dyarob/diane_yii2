@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 use yii\widgets\LinkPager;
 ?>
 <script type="text/javascript" src="js/series_class.js"></script>
@@ -35,11 +36,24 @@ use yii\widgets\LinkPager;
 <div class="column column-big" id="txtHint">
 	<p>Sélectionnez une classe pour lui affecter des séries de problèmes.</p>
 
-	<?php $form = ActiveForm::begin();
+	<?php $form = ActiveForm::begin(
+		['options' => [
+			'name' => 'form'
+		]]);?>
+	<?= Html::hiddenInput('id_class', '') ?>
+	<?php
 	foreach ($series as $serie):
 	?>
 		<?= Html::checkbox($serie->name, false) ?>
-	<?php endforeach;
-	ActiveForm::end(); ?>
+		<?php
+		echo $serie->name;
+		?>
+		<br />
+	<?php endforeach; ?>
+	<?= Html::submitButton('Enregistrer', [
+			'class' => 'btn btn-primary',
+			//'name' => $serie['name']
+			]) ?>
+	<?php ActiveForm::end(); ?>
 </div>
 </div>

@@ -101,11 +101,11 @@ class AnswerSub extends \yii\db\ActiveRecord
 			return ;
 
 		case ($is_nb0 && !$is_nb1 && !$is_nb2):		// TRUE  FALSE FALSE
-			$this->detect_mental_calcul($this->nbs[1]);
+			$this->detect_mental_calcul($this->nbs[1], $nbs_problem);
 			if (isset($this->simpl_fors[$this->nbs[1]])) {
 				$this->find_resol_typ($nbs_problem);
 				return ; }
-			$this->detect_mental_calcul($this->nbs[2]);
+			$this->detect_mental_calcul($this->nbs[2], $nbs_problem);
 			if (isset($this->simpl_fors[$this->nbs[2]])) {
 				$this->find_resol_typ($nbs_problem);
 				return ; }

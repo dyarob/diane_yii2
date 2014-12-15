@@ -31,13 +31,15 @@ function showStudent(studt) {
 	// answers filling with diagnostic for each answer
 	for (i = 0, i2 = 0; i < l; ++i, i2+=2) {
 		answers[i] = document.createElement("p");
-		answers[i].innerHTML = "<hr />Réponse fournie : « " + studt.a[i*2].answer + " »";
+		answers[i].innerHTML = "<hr />Réponse fournie : « " + studt.a[i*2].answer + " »<br/>";
+		/*
 		if (studt.a[i2].correct === '1') {
 			answers[i].innerHTML += " (bonne réponse) <br />";
 			++correct_num;
 		} else {
 			answers[i].innerHTML += " (mauvaise réponse) <br />";
 		}
+		*/
 		answers[i].innerHTML += studt.s.first_name;
 		calc_num = studt.a[i2 + 1].length;
 		ment_num = 0;

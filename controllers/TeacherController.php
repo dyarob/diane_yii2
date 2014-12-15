@@ -208,7 +208,7 @@ class TeacherController extends Controller
 			->orderBy('name')
 			->all();
 		$series = Serie::find()
-			->all;
+			->all();
 		return $this->render('chooseseries', [
 			'classes' => $myClasses,
 			'series' => $series,

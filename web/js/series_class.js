@@ -1,8 +1,19 @@
 function showStudent(clas) {
 
+	document.forms['form'].elements['id_class'].value =
+	clas.c.id;
+
+	//$("input:checkbox").attr('checked', false);
+	var l = clas.s.length;
+	var i;
+	for (i=0; i<l; ++i) {
+		document.forms['form'].elements['serie1'].checked = true;
+		document.forms['form'].elements[class.s[i].name].checked = true;
+	}
+
 	// New page elements declaration
-	var mydiv = document.getElementById("txtHint");
-	var title = document.createElement("h1");
+	//var mydiv = document.getElementById("txtHint");
+	//var title = document.createElement("h1");
 	/*
 	var percent = document.createElement("div");
 	var percent_correct = document.createElement("h2");
@@ -12,8 +23,8 @@ function showStudent(clas) {
 	*/
 
 	// New page elements filling
-	title.innerHTML = clas.c.name;
-	title.innerHTML += clas.s[0].name;
+	//title.innerHTML = clas.c.name;
+	//title.innerHTML += clas.s[0].name;
 
 	/*
 	var i; // main loop counter
@@ -96,8 +107,8 @@ function showStudent(clas) {
 	ctx.fillRect(width * correct_num / 100,0,width * (100 - correct_num) / 100,10);
 */
 	// New page creation
-	mydiv.innerHTML = "";
-	mydiv.appendChild(title);
+	//mydiv.innerHTML = "";
+	//mydiv.appendChild(title);
 }
 	/*
 	percent.appendChild(percent_correct);
