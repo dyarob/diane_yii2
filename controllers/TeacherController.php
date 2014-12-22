@@ -216,6 +216,4 @@ class TeacherController extends Controller
 			'selectedStudent' => NULL,
 		]);
 	}
-
 }
-

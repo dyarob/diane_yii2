@@ -1,14 +1,15 @@
-function showStudent(clas) {
+function showSeries(clas) {
 
 	document.forms['form'].elements['id_class'].value =
 	clas.c.id;
 
-	//$("input:checkbox").attr('checked', false);
+	$("input:checkbox").attr('checked', false);
+	document.forms['form'].elements['serie1'].checked = true;
 	var l = clas.s.length;
 	var i;
 	for (i=0; i<l; ++i) {
 		document.forms['form'].elements['serie1'].checked = true;
-		document.forms['form'].elements[class.s[i].name].checked = true;
+		document.forms['form'].elements[clas.s[i].name].checked = true;
 	}
 
 	// New page elements declaration

@@ -37,9 +37,6 @@ use yii\widgets\LinkPager;
 			<?= Html::encode("{$student->clas->name}") ?>
 		</p>
 		</li>
-	<?php
-		//print_r($answers);
-	?>
 		<?php endforeach; ?>
 
 	</ul>

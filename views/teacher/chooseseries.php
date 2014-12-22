@@ -19,11 +19,11 @@ use yii\widgets\LinkPager;
 		?>
 
 		<li>
-		<p onclick="showStudent(<?= Html::encode(json_encode(
-			//$class->attributes
+		<p onclick="showSeries(<?= Html::encode(json_encode(
 			array('c' => $class->attributes,
 				  's' => $class->series)
 				)) ?>)">
+<?php print_r($class->series); ?>
 			<?= Html::encode("{$class->name}") ?>
 			<?= Html::encode("{$class->year}") ?>
 		</p>
@@ -50,6 +50,7 @@ use yii\widgets\LinkPager;
 		?>
 		<br />
 	<?php endforeach; ?>
+	<br />
 	<?= Html::submitButton('Enregistrer', [
 			'class' => 'btn btn-primary',
 			//'name' => $serie['name']

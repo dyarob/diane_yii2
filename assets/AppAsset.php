@@ -22,6 +22,8 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
     	'js/interfaceIE.js',
+    	'js/series_class.js',
+    	'js/showStudent.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
