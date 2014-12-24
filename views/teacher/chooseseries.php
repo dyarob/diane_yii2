@@ -23,7 +23,6 @@ use yii\widgets\LinkPager;
 			array('c' => $class->attributes,
 				  's' => $class->series)
 				)) ?>)">
-<?php print_r($class->series); ?>
 			<?= Html::encode("{$class->name}") ?>
 			<?= Html::encode("{$class->year}") ?>
 		</p>
@@ -44,7 +43,7 @@ use yii\widgets\LinkPager;
 	<?php
 	foreach ($series as $serie):
 	?>
-		<?= Html::checkbox($serie->name, false) ?>
+		<?= Html::checkbox(Html::encode($serie->name), false) ?>
 		<?php
 		echo $serie->name;
 		?>

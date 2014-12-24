@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Teacher;
 use app\models\TeacherSearch;
+use app\models\SerieClassLink;
 use app\models\TeacherLoginForm;
 use app\models\Student;
 use app\models\Clas;
@@ -123,38 +124,38 @@ class TeacherController extends Controller
 
     public function actionSignup()
     {
-	$model = new Teacher();
-	if ($model->load(Yii::$app->request->post())) {
-	    if ($model->validate()) {
-	        // form inputs are valid, do something here
-		if ($this->actionInsert($model) === TRUE);
-			return $this->redirect(['dashboard']);
-	    }
-        }
-        return $this->render('signup', ['model' => $model]);
+		$model = new Teacher();
+		if ($model->load(Yii::$app->request->post())) {
+			if ($model->validate()) {
+				// form inputs are valid, do something here
+				if ($this->actionInsert($model) === TRUE);
+					return $this->redirect(['dashboard']);
+			}
+		}
+		return $this->render('signup', ['model' => $model]);
     }
 
     protected function actionInsert($model)
     {
-	// 1- Verify if the student already exists
-	$row = (new \yii\db\Query())
-		->select('*')
-		->from('teachers')
-		->where(['login' => $model->login])
-		->exists();
-	if ($row === FALSE)
-	{
-	// 2- If not, save the model (create it)
-	$model->save();
-	
-	// 3- Open session
-	$session = Yii::$app->session;
-	$session->open();
-	$session['login'] = $model->login;
-	return TRUE;
-	}
-	else
-	return FALSE;
+		// 1- Verify if the student already exists
+		$row = (new \yii\db\Query())
+			->select('*')
+			->from('teachers')
+			->where(['login' => $model->login])
+			->exists();
+		if ($row === FALSE)
+		{
+			// 2- If not, save the model (create it)
+			$model->save();
+			
+			// 3- Open session
+			$session = Yii::$app->session;
+			$session->open();
+			$session['login'] = $model->login;
+			return TRUE;
+		}
+		else
+			return FALSE;
     }
 
     public function actionLogin()
@@ -196,6 +197,38 @@ class TeacherController extends Controller
 
 	public function actionChooseseries()
 	{
+		// Register modifications
+		if (isset($_POST))
+		{
+			foreach ($_POST as $key=>$val)
+			{
+				$serie = Serie::find()
+					->where(['name' => $key])
+					->one();
+					$model = new SerieClassLink;
+					$model->id_serie = $serie['id'];
+					$model->id_class = $_POST['id_class'];
+					$model->save();
+				$link = SerieClassLink::find()
+					->where(['id_serie' => $serie['id'],
+							 'id_class' => $_POST['id_class']])
+					->one();
+				if ($link !== NULL && $val === FALSE)
+				{	// The link exist while it shouldn't anymore
+					// (the teacher unselected a serie for the given class)
+					$link->delete();
+				}
+				else if ($link === NULL && $val === TRUE)
+				{	// The link doesn't exist while it should
+					// (the teacher selected a serie for the given class)
+					$model = new SerieClassLink;
+					$model->id_serie = $serie['id'];
+					$model->id_class = $_POST['id_class'];
+					$model->save();
+				}
+			}
+		}
+		// (re-)Display form
 		$query = Clas::find();
 		$pagination = new Pagination([
 			'defaultPageSize' => 20,
@@ -214,6 +247,7 @@ class TeacherController extends Controller
 			'series' => $series,
 			'pagination' => $pagination,
 			'selectedStudent' => NULL,
+			'post' => $_POST,
 		]);
 	}
 }

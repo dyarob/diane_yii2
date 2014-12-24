@@ -4,11 +4,9 @@ function showSeries(clas) {
 	clas.c.id;
 
 	$("input:checkbox").attr('checked', false);
-	document.forms['form'].elements['serie1'].checked = true;
 	var l = clas.s.length;
 	var i;
 	for (i=0; i<l; ++i) {
-		document.forms['form'].elements['serie1'].checked = true;
 		document.forms['form'].elements[clas.s[i].name].checked = true;
 	}
 
