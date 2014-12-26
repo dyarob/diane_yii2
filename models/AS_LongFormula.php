@@ -14,7 +14,7 @@ use app\models\AnswerSub;
  * @property string $formul
  * @property string $str
  */
-class AS_LoneNb extends AnswerSub
+class AS_LongFormula extends AnswerSub
 {
 
 }

@@ -210,7 +210,7 @@ class AnswerSub extends \yii\db\ActiveRecord
 
 	// To be modified in order to add more operations.
 	// (or just make it better with tables and structures)
-	private function	detect_mental_calcul($n, $nbs_problems)
+	public function	detect_mental_calcul($n, $nbs_problems)
 	{
 		$nbs = $nbs_problems;
 		array_merge($nbs, $this->simpl_fors);

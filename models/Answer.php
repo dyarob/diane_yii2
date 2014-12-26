@@ -45,6 +45,17 @@ class Answer extends \yii\db\ActiveRecord
 			$model->detect_mental_calcul($lone_nb[0], $nbs_problem);
 			//$model->save();
 		}
+		preg_match_all("/\d+\s*[+*-\/]\s*(\d+\s*[+*-\/]\s*)+\d+\s*=\s*\d+/",
+			$this->answer, $long_formulas, PREG_SET_ORDER);
+		foreach($long_formulas as $long_formula)
+		{
+			$model = new AS_LongFormula;
+			$model->id_answer = $this->id;
+			$model->str = $long_formula[0];
+			$model->simpl_fors = $simpl_fors;
+			$model->analyse($nbs_problem, $simpl_fors);
+			//$model->save();
+		}
 	}
 
     /**
