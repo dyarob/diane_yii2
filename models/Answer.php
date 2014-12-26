@@ -1,7 +1,5 @@
 <?php
-
 namespace app\models;
-
 use Yii;
 use app\models\AnswerSub;
 
@@ -35,6 +33,17 @@ class Answer extends \yii\db\ActiveRecord
 			$model->analyse($nbs_problem, $simpl_fors);
 			$model->save();
 			$simpl_fors[$model->result] = $model->formul;
+		}
+		preg_match_all("/(?![+*-\/=])\s*\d+\s*(?![+*-\/=])/",
+			$this->answer, $lone_nbs, PREG_SET_ORDER);
+		foreach($lone_nbs as $lone_nb)
+		{
+			$model = new AS_LoneNb;
+			$model->id_answer = $this->id;
+			$model->str = $lone_nb[0];
+			$model->simpl_fors = $simpl_fors;
+			$model->detect_mental_calcul($lone_nb[0], $nbs_problem);
+			//$model->save();
 		}
 	}
 
