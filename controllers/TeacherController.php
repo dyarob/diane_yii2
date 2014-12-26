@@ -1,7 +1,5 @@
 <?php
-
 namespace app\controllers;
-
 use Yii;
 use app\models\Teacher;
 use app\models\TeacherSearch;
@@ -197,34 +195,36 @@ class TeacherController extends Controller
 
 	public function actionChooseseries()
 	{
+		$series = Serie::find()
+			->all();
 		// Register modifications
-		if (isset($_POST))
+		if (isset($_POST['id_class']))
 		{
 			foreach ($_POST as $key=>$val)
+			{	// Plaster as series with spaces in the names wouldn't work
+				// as the sp get replaced by '_' in $_POST.
+				// But now series with '_' in the names won't work.
+				$new_key = str_replace("_", " ", $key);
+				$_POST[$new_key] = $val;
+			}
+			foreach ($series as $s)
 			{
-				$serie = Serie::find()
-					->where(['name' => $key])
-					->one();
-					$model = new SerieClassLink;
-					$model->id_serie = $serie['id'];
-					$model->id_class = $_POST['id_class'];
-					$model->save();
 				$link = SerieClassLink::find()
-					->where(['id_serie' => $serie['id'],
+					->where(['id_serie' => $s->id,
 							 'id_class' => $_POST['id_class']])
 					->one();
-				if ($link !== NULL && $val === FALSE)
-				{	// The link exist while it shouldn't anymore
-					// (the teacher unselected a serie for the given class)
-					$link->delete();
-				}
-				else if ($link === NULL && $val === TRUE)
+				if (isset($_POST[$s->name]) && $link === NULL)
 				{	// The link doesn't exist while it should
 					// (the teacher selected a serie for the given class)
 					$model = new SerieClassLink;
-					$model->id_serie = $serie['id'];
+					$model->id_serie = $s->id;
 					$model->id_class = $_POST['id_class'];
 					$model->save();
+				}
+				else if (!isset($_POST[$s->name]) && $link !== NULL)
+				{	// The link exist while it shouldn't anymore
+					// (the teacher unselected a serie for the given class)
+					$link->delete();
 				}
 			}
 		}
@@ -239,8 +239,6 @@ class TeacherController extends Controller
 			->offset($pagination->offset)
 			->limit($pagination->limit)
 			->orderBy('name')
-			->all();
-		$series = Serie::find()
 			->all();
 		return $this->render('chooseseries', [
 			'classes' => $myClasses,

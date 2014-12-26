@@ -43,7 +43,7 @@ use yii\widgets\LinkPager;
 	<?php
 	foreach ($series as $serie):
 	?>
-		<?= Html::checkbox(Html::encode($serie->name), false) ?>
+		<?= Html::checkbox($serie->name, false) ?>
 		<?php
 		echo $serie->name;
 		?>
@@ -54,6 +54,8 @@ use yii\widgets\LinkPager;
 			'class' => 'btn btn-primary',
 			//'name' => $serie['name']
 			]) ?>
-	<?php ActiveForm::end(); ?>
+	<?php ActiveForm::end();
+		//print_r($post);
+	?>
 </div>
 </div>
