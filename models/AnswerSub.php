@@ -22,6 +22,12 @@ class AnswerSub extends \yii\db\ActiveRecord
 	public					$result;
 	public					$simpl_fors;
 
+	public function			fill($id_answer, $str = NULL, $simpl_fors = NULL)
+	{
+		$this->id_answer = $id_answer;
+		$this->str = $str;
+		$this->simpl_fors = $simpl_fors;
+	}
 
 	public function			analyse($nbs_problem, $simpl_fors)
 	{
