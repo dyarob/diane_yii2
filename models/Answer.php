@@ -17,10 +17,18 @@ use app\models\AnswerSub;
  */
 class Answer extends \yii\db\ActiveRecord
 {
+
+	public function fill($id_student, $str = NULL)
+	{
+		$this->id_student = $id_student;
+		if ($str !== NULL)
+			$this->answer = $str;
+	}
+
 	// Analyses a simple arithmetic problem answer.
 	// WORKS ONLY FOR ADDITIONS / SUBSTRACTIONS!
 	// NO NEGATIVE NUMBERS ALLOWED!
-	public function	analyse($nbs_problem)//$nbs_problem)
+	public function	analyse($nbs_problem)
 	{
 		$simpl_fors = array();
 		preg_match_all("/\d+\s*[+*-\/]\s*\d+\s*=\s*\d+/",

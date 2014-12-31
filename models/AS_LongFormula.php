@@ -17,9 +17,9 @@ use app\models\AnswerSub;
 class AS_LongFormula extends AnswerSub
 {
 
-	function analyse($nbs_problem, $simpl_fors)
+	public function analyse($nbs_problem, $simpl_fors)
 	{
-		$words = preg_split('/\s+/', $str);	// splits words by any whitespace
+		$words = preg_split('/\s+/', $this->str);	// splits words by any whitespace
 											// Ideal case:
 											// [0] -> nombre1		(ex 1)
 											// [1] -> operateur		(ex +)
@@ -38,8 +38,8 @@ class AS_LongFormula extends AnswerSub
 		$previous_result = (int)$words[0] + (int)$words[1];
 		$str_result += "=" + (string)$previous_result + " ";
 		// Intermediary operations:
-		$l = $words->length;
-		for ($i = 2; $i < $l; $i += 2)
+		$l = count($words);
+		for ($i = 2; $i < $l - 2; $i += 2)
 		{
 			$str_result += (string)$previous_result;
 			$str_result += $words[$i];
@@ -51,8 +51,10 @@ class AS_LongFormula extends AnswerSub
 			}
 			$str_result += "=" + ((int)$words[$i] + (int)$words[$i + 1]) + " ";
 		}
-		Answer::analyse();
-		// a faire : dans answer.php analyse($str = $this->answer) qu'on peut utiliser d'ailleurs (ici par ex)
+		$model = new Answer;
+		$model->fill(NULL, $str_result);
+		$model->analyse($nbs_problem);
+		$model->save();
 	}
 
 }

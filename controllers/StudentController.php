@@ -29,7 +29,6 @@ class StudentController extends Controller
             ],
         ];
     }
-
     /**
      * Lists all Student models.
      * @return mixed
@@ -43,7 +42,6 @@ class StudentController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
     /**
      * Displays a single Student model.
      * @param integer $id
@@ -55,7 +53,6 @@ class StudentController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-
     /**
      * Creates a new Student model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -72,7 +69,6 @@ class StudentController extends Controller
             ]);
         }
     }
-
     /**
      * Updates an existing Student model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -90,7 +86,6 @@ class StudentController extends Controller
             ]);
         }
     }
-
     /**
      * Deletes an existing Student model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -102,7 +97,6 @@ class StudentController extends Controller
         $this->findModel($id)->delete();
         return $this->redirect(['index']);
     }
-
     /**
      * Finds the Student model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -190,7 +184,7 @@ class StudentController extends Controller
 		if ($model->load(Yii::$app->request->post()) && $model->validate())
 		{
 			$_SESSION['prob_count'] += 1;
-			$model->id_student = $_SESSION['student']->id;
+			$model->fill($_SESSION['student']->id);
 			$nbs_problem = array('15'=>'N1', '24'=>'N2', '1'=>'un');
 			/*preg_match_all(
 				'/\'(?<key>\w+)\'\=\>\'(?<value>\w+)\'/',
