@@ -38,11 +38,7 @@ class Answer extends \yii\db\ActiveRecord
 			{
 				$model = new AS_LongFormula;
 				$model->fill($this->id, $long_formula[0], $simpl_fors);
-				//$model->id_answer = $this->id;
-				//$model->str = $long_formula[0];
-				//$model->simpl_fors = $simpl_fors;
 				$model->analyse($nbs_problem, $simpl_fors);
-				//$model->save();
 			}
 		}
 		else if (preg_match_all("/\d+\s*[+*-\/]\s*\d+\s*=\s*\d+/",
@@ -52,8 +48,6 @@ class Answer extends \yii\db\ActiveRecord
 			{
 				$model = new AnswerSub;
 				$model->fill($this->id, $simpl_formula[0]);
-				//$model->id_answer = $this->id;
-				//$model->str = $simpl_formula[0];
 				$model->analyse($nbs_problem, $simpl_fors);
 				$model->save();
 				$simpl_fors[$model->result] = $model->formul;
@@ -66,9 +60,6 @@ class Answer extends \yii\db\ActiveRecord
 			{
 				$model = new AS_LoneNb;
 				$model->fill($this->id, $lone_nb[0], $simpl_fors);
-				//$model->id_answer = $this->id;
-				//$model->str = $lone_nb[0];
-				//$model->simpl_fors = $simpl_fors;
 				$model->detect_mental_calcul($lone_nb[0], $nbs_problem);
 			}
 		}

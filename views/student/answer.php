@@ -24,6 +24,7 @@ $_SESSION = Yii::$app->session;
 <p>
 <?php
 $text = $problems[$_SESSION['prob_count']]['statement'];
+//$text .= $problems[$_SESSION['prob_count']]['numbers'];
 $id = 0;
 for($piece = strtok($text, " "), $i=1 ; $piece != "" ; $piece = strtok(" "))
 {
@@ -37,6 +38,7 @@ for($piece = strtok($text, " "), $i=1 ; $piece != "" ; $piece = strtok(" "))
 	$i++;
 }
 print("<Br>");
+//print_r($nbs_problem);
 ?>
 </p>
 

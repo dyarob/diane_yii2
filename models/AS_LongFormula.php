@@ -56,7 +56,6 @@ class AS_LongFormula extends AnswerSub
 		$model->fill(NULL, $str_result);
 		$model->id = $this->id_answer;
 		$model->analyse($nbs_problem);
-		//$model->save(false);
 	}
 
 }

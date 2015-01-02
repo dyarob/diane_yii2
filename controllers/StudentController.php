@@ -168,26 +168,27 @@ class StudentController extends Controller
     public function actionAnswer($id_serie)
     {
 		$_SESSION = Yii::$app->session;
-		$serie = Serie::find()
+		$_SESSION['prob_count'] = 0;
+		$_SESSION['numbers'] = NULL;
+		$serie = Serie::find()				// find serie given in argument
 			->where(['id' => $id_serie])
 			->one();
-		$problems = (new \yii\db\Query())
+		$problems = (new \yii\db\Query())	// find problems in given serie
 			->select('*')
 			->from('problems')
 			->where(['id_serie' => $id_serie])
 			->all();
-		$model = new Answer;
+		$model = new Answer;				// Answer object to be filled with the student's answer
 		if ($model->load(Yii::$app->request->post()) && $model->validate())
 		{
 			$_SESSION['prob_count'] += 1;
 			$model->fill($_SESSION['student']->id);
-			$nbs_problem = array('15'=>'N1', '24'=>'N2', '1'=>'un');
-			/*preg_match_all(
+			//$nbs_problem = array('15'=>'N1', '24'=>'N2', '1'=>'un');
+			preg_match_all(
 				'/\'(?<key>\w+)\'\=\>\'(?<value>\w+)\'/',
 				$problems[$_SESSION['prob_count']]['numbers'],
 				$nbs_problem);
 			$nbs_problem = array_combine($nbs_problem['key'], $nbs_problem['value']);
-			 */
 			$model->save();
 			$model->analyse($nbs_problem);
 			$model->save();
@@ -202,6 +203,7 @@ class StudentController extends Controller
 				['model' => $model,
 				'problems' => $problems,
 				'serie' => $serie,
+				//'nbs_problem' => $nbs_problem,
 				]);
     }
 }
