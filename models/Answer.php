@@ -31,39 +31,46 @@ class Answer extends \yii\db\ActiveRecord
 	public function	analyse($nbs_problem)
 	{
 		$simpl_fors = array();
-		preg_match_all("/\d+\s*[+*-\/]\s*\d+\s*=\s*\d+/",
-			$this->answer, $simpl_formulas, PREG_SET_ORDER);
-		foreach ($simpl_formulas as $simpl_formula)
+		if (preg_match_all("/\d+\s*[+*-\/]\s*(\d+\s*[+*-\/]\s*)+\d+\s*=\s*\d+/",
+			$this->answer, $long_formulas, PREG_SET_ORDER))
 		{
-			$model = new AnswerSub;
-			$model->fill($this->id, $simpl_formula[0]);
-			//$model->id_answer = $this->id;
-			//$model->str = $simpl_formula[0];
-			$model->analyse($nbs_problem, $simpl_fors);
-			$model->save();
-			$simpl_fors[$model->result] = $model->formul;
+			foreach($long_formulas as $long_formula)
+			{
+				$model = new AS_LongFormula;
+				$model->fill($this->id, $long_formula[0], $simpl_fors);
+				//$model->id_answer = $this->id;
+				//$model->str = $long_formula[0];
+				//$model->simpl_fors = $simpl_fors;
+				$model->analyse($nbs_problem, $simpl_fors);
+				//$model->save();
+			}
 		}
-		preg_match_all("/(?![+*-\/=])\s*\d+\s*(?![+*-\/=])/",
-			$this->answer, $lone_nbs, PREG_SET_ORDER);
-		foreach($lone_nbs as $lone_nb)
+		else if (preg_match_all("/\d+\s*[+*-\/]\s*\d+\s*=\s*\d+/",
+				$this->answer, $simpl_formulas, PREG_SET_ORDER))
 		{
-			$model = new AS_LoneNb;
-			$model->fill($this->id, $lone_nb[0], $simpl_fors);
-			//$model->id_answer = $this->id;
-			//$model->str = $lone_nb[0];
-			//$model->simpl_fors = $simpl_fors;
-			$model->detect_mental_calcul($lone_nb[0], $nbs_problem);
+			foreach ($simpl_formulas as $simpl_formula)
+			{
+				$model = new AnswerSub;
+				$model->fill($this->id, $simpl_formula[0]);
+				//$model->id_answer = $this->id;
+				//$model->str = $simpl_formula[0];
+				$model->analyse($nbs_problem, $simpl_fors);
+				$model->save();
+				$simpl_fors[$model->result] = $model->formul;
+			}
 		}
-		preg_match_all("/\d+\s*[+*-\/]\s*(\d+\s*[+*-\/]\s*)+\d+\s*=\s*\d+/",
-			$this->answer, $long_formulas, PREG_SET_ORDER);
-		foreach($long_formulas as $long_formula)
+		else if (preg_match_all("/(?![+*-\/=])\s*\d+\s*(?![+*-\/=])/",
+			$this->answer, $lone_nbs, PREG_SET_ORDER))
 		{
-			$model = new AS_LongFormula;
-			$model->fill($this->id, $long_formula[0], $simpl_fors);
-			//$model->id_answer = $this->id;
-			//$model->str = $long_formula[0];
-			//$model->simpl_fors = $simpl_fors;
-			$model->analyse($nbs_problem, $simpl_fors);
+			foreach($lone_nbs as $lone_nb)
+			{
+				$model = new AS_LoneNb;
+				$model->fill($this->id, $lone_nb[0], $simpl_fors);
+				//$model->id_answer = $this->id;
+				//$model->str = $lone_nb[0];
+				//$model->simpl_fors = $simpl_fors;
+				$model->detect_mental_calcul($lone_nb[0], $nbs_problem);
+			}
 		}
 	}
 
@@ -74,7 +81,6 @@ class Answer extends \yii\db\ActiveRecord
     {
         return 'answers';
     }
-
     /**
      * @inheritdoc
      */
@@ -88,7 +94,6 @@ class Answer extends \yii\db\ActiveRecord
             [['formul'], 'string', 'max' => 33]
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -105,12 +110,10 @@ class Answer extends \yii\db\ActiveRecord
 			'id_strategy' => 'Id Strategy',
         ];
     }
-
 	public function getStudent()
 	{
 		return $this->hasOne(Student::className(), ['id' => 'id_student']);
 	}
-
 	public function getSubanswers()
 	{
 		return $this->hasMany(AnswerSub::className(), ['id_answer' => 'id'])->AsArray();

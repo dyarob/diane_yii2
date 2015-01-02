@@ -1,9 +1,6 @@
 <?php
-
 namespace app\models;
-
 use Yii;
-
 /**
  * This is the model class for table "students".
  *
@@ -13,6 +10,7 @@ use Yii;
  */
 class Student extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -20,7 +18,6 @@ class Student extends \yii\db\ActiveRecord
     {
         return 'students';
     }
-
     /**
      * @inheritdoc
      */
@@ -32,7 +29,6 @@ class Student extends \yii\db\ActiveRecord
             [['first_name'], 'string', 'max' => 20],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -52,7 +48,8 @@ class Student extends \yii\db\ActiveRecord
 
 	public function getClas()
 	{
-		return $this->hasOne(Clas::className(), ['id' => 'id_class'])->where('year=:year', [':year' => date("Y")]);
+		return $this->hasOne(Clas::className(), ['id' => 'id_class'])//->where('year=:year', [':year' => date("Y")]);
+		;
 	}
 
 	public function getSeries()

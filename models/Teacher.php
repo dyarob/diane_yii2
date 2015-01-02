@@ -1,7 +1,5 @@
 <?php
-
 namespace app\models;
-
 use Yii;
 /**
  * This is the model class for table "teachers".
@@ -12,7 +10,6 @@ use Yii;
  * @property string $login
  * @property string $password
  */
-
 class Teacher extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     public $authKey;
@@ -26,7 +23,6 @@ class Teacher extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return 'teachers';
     }
-
     /**
      * @inheritdoc
      */
@@ -42,7 +38,6 @@ class Teacher extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 	    [['repeatpassword'], 'compare', 'compareAttribute'=>'password', 'message'=>"Les mots de passe ne correspondent pas."]
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -60,7 +55,7 @@ class Teacher extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 	public function getClas()
 	{
 		return $this->hasMany(Clas::className(), ['id_teacher' => 'id'])
-			->where('year=:year', [':year' => date("Y")])
+		//	->where('year=:year', [':year' => date("Y")])
 			->indexBy('id')
 			->select('id')
 			->column();
@@ -79,7 +74,6 @@ class Teacher extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 		}
 		return new static($dbTeacher);
 	}
-
 	/**
 	 *  * @inheritdoc
 	 *   */

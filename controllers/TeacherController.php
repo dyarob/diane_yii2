@@ -12,12 +12,12 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\Pagination;
-
 /**
  * TeacherController implements the CRUD actions for Teacher model.
  */
 class TeacherController extends Controller
 {
+
     public function behaviors()
     {
         return [
@@ -29,7 +29,6 @@ class TeacherController extends Controller
             ],
         ];
     }
-
     /**
      * Lists all Teacher models.
      * @return mixed
@@ -43,7 +42,6 @@ class TeacherController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
     /**
      * Displays a single Teacher model.
      * @param integer $id
@@ -55,7 +53,6 @@ class TeacherController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-
     /**
      * Creates a new Teacher model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -72,7 +69,6 @@ class TeacherController extends Controller
             ]);
         }
     }
-
     /**
      * Updates an existing Teacher model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -90,7 +86,6 @@ class TeacherController extends Controller
             ]);
         }
     }
-
     /**
      * Deletes an existing Teacher model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -102,7 +97,6 @@ class TeacherController extends Controller
         $this->findModel($id)->delete();
         return $this->redirect(['index']);
     }
-
     /**
      * Finds the Teacher model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -118,7 +112,6 @@ class TeacherController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
 
     public function actionSignup()
     {

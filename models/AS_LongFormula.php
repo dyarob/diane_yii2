@@ -33,28 +33,30 @@ class AS_LongFormula extends AnswerSub
 		// str_result example "1+2=3 3+3=6"
 		$str_result = "";
 		// First operation:
-		$str_result += $words[0];
-		$str_result += $words[1];
-		$previous_result = (int)$words[0] + (int)$words[1];
-		$str_result += "=" + (string)$previous_result + " ";
+		$str_result .= $words[0];
+		$str_result .= $words[1];
+		$str_result .= $words[2];
+		$previous_result = (int)$words[0] + (int)$words[2];
+		$str_result .= "=" . (string)$previous_result . " ";
 		// Intermediary operations:
 		$l = count($words);
-		for ($i = 2; $i < $l - 2; $i += 2)
+		for ($i = 3; $i < $l - 2; $i += 2)
 		{
-			$str_result += (string)$previous_result;
-			$str_result += $words[$i];
-			$str_result += $words[$i + 1];
+			$str_result .= (string)$previous_result;
+			$str_result .= $words[$i];
+			$str_result .= $words[$i + 1];
 			if ($words[$i + 2] == "=") // This operation is the final operation
 			{
-				$str_result += "=" + $words[$i + 3];
+				$str_result .= "=" . $words[$i + 3];
 				break;
 			}
-			$str_result += "=" + ((int)$words[$i] + (int)$words[$i + 1]) + " ";
+			$str_result .= "=" . (string)((int)$words[$i] + (int)$words[$i + 1]) . " ";
 		}
 		$model = new Answer;
 		$model->fill(NULL, $str_result);
+		$model->id = $this->id_answer;
 		$model->analyse($nbs_problem);
-		$model->save();
+		//$model->save(false);
 	}
 
 }

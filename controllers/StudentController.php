@@ -1,7 +1,5 @@
 <?php
-
 namespace app\controllers;
-
 use Yii;
 use app\models\Student;
 use app\models\StudentSearch;
@@ -12,12 +10,12 @@ use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
 /**
  * StudentController implements the CRUD actions for Student model.
  */
 class StudentController extends Controller
 {
+
     public function behaviors()
     {
         return [
@@ -165,12 +163,11 @@ class StudentController extends Controller
 	}
 
 	/*
-	* The student want to answer a give problem/serie of problems.
+	* The student answers a problem from a given serie.
 	*/
     public function actionAnswer($id_serie)
     {
 		$_SESSION = Yii::$app->session;
-/**/
 		$serie = Serie::find()
 			->where(['id' => $id_serie])
 			->one();
@@ -179,7 +176,6 @@ class StudentController extends Controller
 			->from('problems')
 			->where(['id_serie' => $id_serie])
 			->all();
-/**/
 		$model = new Answer;
 		if ($model->load(Yii::$app->request->post()) && $model->validate())
 		{
